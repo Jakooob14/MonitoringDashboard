@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using MonitoringDashboard.Data.Models;
 
 namespace MonitoringDashboard.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-
-    // public DbSet<a> a => Set<a>();
+    public DbSet<MonitoredService> MonitoredServices => Set<MonitoredService>();
+    public DbSet<ServiceCheck> ServiceChecks => Set<ServiceCheck>();
 }

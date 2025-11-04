@@ -1,0 +1,42 @@
+﻿@page "/add-monitored-service"
+@using MonitoringDashboard.Data
+@inject AppDbContext Db
+
+<h3>Add Monitored Service</h3>
+
+<EditForm FormName="create" Model="NewMonitoredService" OnValidSubmit="AddService">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    
+    <div class="mb-3">
+        <label for="name">Name</label>
+        <InputText id="name" class="border-2 p-2" @bind-Value="NewMonitoredService.Name" />
+    </div>
+    <div>
+        <label for="url">Url</label>
+        <InputText id="url" class="border-2 p-2" @bind-Value="NewMonitoredService.Url" />
+    </div>
+    <div>
+        <label for="checkIntervalSeconds">Check interval seconds</label>
+        <InputNumber id="checkIntervalSeconds" class="border-2 p-2" @bind-Value="NewMonitoredService.CheckIntervalSeconds" />
+    </div>
+    <div>
+        <label for="isActive">Is Active</label>
+        <InputCheckbox id="isActive" class="border-2 p-2" @bind-Value="NewMonitoredService.IsActive" />
+    </div>
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code
+{
+    [SupplyParameterFromForm] private Data.Models.MonitoredService NewMonitoredService { get; set; } = new();
+    
+    private async Task AddService()
+    {
+        NewMonitoredService.CreatedAt = DateTime.UtcNow;
+        
+        Db.MonitoredServices.Add(NewMonitoredService);
+        await Db.SaveChangesAsync();
+        NewMonitoredService = new();
+    }
+}
