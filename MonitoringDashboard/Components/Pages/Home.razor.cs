@@ -6,7 +6,7 @@ using MonitoringDashboard.Data.Models;
 
 namespace MonitoringDashboard.Components.Pages;
 
-public partial class Home
+public partial class Home : IAsyncDisposable
 {
     private List<MonitoredService> _monitoredServices = new();
     private HubConnection? _hubConnection;
