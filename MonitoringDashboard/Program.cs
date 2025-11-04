@@ -30,6 +30,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddHttpClient<ServiceChecker>();
 
 builder.Services.AddHostedService<MonitoringWorker>();
+builder.Services.AddHostedService<CleanupWorker>();
 
 builder.Services.AddSignalR();
 

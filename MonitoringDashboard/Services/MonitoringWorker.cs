@@ -20,7 +20,7 @@ public class MonitoringWorker(
             try
             {
                 using var scope = scopeFactory.CreateScope();
-                var db = scope.ServiceProvider.GetRequiredService<Data.AppDbContext>();
+                await using var db = scope.ServiceProvider.GetRequiredService<Data.AppDbContext>();
 
                 var services = await db.MonitoredServices.ToListAsync(stoppingToken);
 
@@ -45,9 +45,9 @@ public class MonitoringWorker(
                     await hubContext.Clients.All.SendAsync("ServiceChecked", cancellationToken: stoppingToken);
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                logger.LogError(ex, "Error occurred while checking services.");
+                logger.LogError(e, "Error occurred while checking services.");
             }
 
             await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
