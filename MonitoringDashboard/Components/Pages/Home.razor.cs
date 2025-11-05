@@ -59,4 +59,23 @@ public partial class Home : IAsyncDisposable
         
         await UpdateMonitoredServices();
     }
+    
+    private int GetFailedServicesCount()
+    {
+        int count = 0;
+        
+        foreach (var monitoredService in _monitoredServices)
+        {
+            var lastCheck = Db.ServiceChecks
+                .Where(c => c.MonitoredServiceId == monitoredService.Id)
+                .OrderByDescending(c => c.CheckedAt)
+                .FirstOrDefault();
+
+            if (lastCheck == null || lastCheck.IsSuccessful) continue;
+
+            count++;
+        }
+        
+        return count;
+    }
 }

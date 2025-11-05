@@ -10,14 +10,24 @@
 <PageTitle>Home</PageTitle>
 
 <section class="container mx-auto mt-12">
-    <h2 class="text-2xl">Monitored services</h2>
-    
-    <NavLink href="/add-monitored-service">Add monitored service</NavLink>
-    
-    <div class="flex flex-col gap-y-4 mt-4">
-        @foreach(var monitoredService in _monitoredServices)
+    <section class="bg-zinc-800 p-4 rounded-xl mt-4 text-2xl font-bold">
+        @if (GetFailedServicesCount() > 0)
         {
-            <MonitoredServiceCard MonitoredService="monitoredService" />
+            int failedCount = GetFailedServicesCount();
+            <span>@failedCount service@(failedCount > 1 ? "s are" : " is") currently down</span>
+        } else {
+            <span>All services are operational</span>
         }
-    </div>
+    </section>
+    
+    <section class="mt-8">
+        <h2 class="text-4xl">Services</h2>
+        <NavLink href="/add-monitored-service">Add monitored service</NavLink>
+        <div class="flex flex-col gap-y-4 mt-4">
+            @foreach (var monitoredService in _monitoredServices)
+            {
+                <MonitoredServiceCard MonitoredService="monitoredService"/>
+            }
+        </div>
+    </section>
 </section>
