@@ -1,9 +1,6 @@
-﻿<div>
-    <span>@MonitoredService.Name</span>
-    <br/>
-    <span>@MonitoredService.Url</span>
-    <br/>
-    <span>Check Interval (seconds): @MonitoredService.CheckIntervalSeconds</span>
-    <br/>
-    <span>Is Active: @(MonitoredService.IsActive ? "Yes" : "No")</span>
+﻿<div class="w-full bg-yellow-100 p-4">
+    <div class="flex items-center gap-x-4">
+        <span class="text-3xl">@MonitoredService.Name</span>
+        @* <div class="rounded-full w-4 h-4 @(MonitoredService.IsS)"></div> *@
+    </div>
 </div>
