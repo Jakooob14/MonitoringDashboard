@@ -1,12 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap'); /* TODO: Download font */
 @import "tailwindcss";
-
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
-a, .btn-link {
-    color: #006bb7;
-}
 
 .btn-primary {
     color: #fff;
@@ -58,8 +51,13 @@ h1:focus {
 }
 
 @layer base {
-    * {
+    html, body {
+        font-family: 'Poppins', Helvetica, Arial, sans-serif;
         @apply text-zinc-100;
+    }
+    
+    a {
+        @apply text-aero-400 hover:text-aero-300 transition-colors;
     }
 }
 
@@ -93,4 +91,16 @@ h1:focus {
     --breakpoint-5xl: 1024px;
     /*--breakpoint-6xl: 1152px;*/
     /*--breakpoint-7xl: 1280px;*/
+
+    --color-aero-50:  hsl(198, 87%, 97%);
+    --color-aero-100: hsl(197, 88%, 94%);
+    --color-aero-200: hsl(195, 86%, 86%);
+    --color-aero-300: hsl(194, 86%, 74%);
+    --color-aero-400: hsl(193, 84%, 60%);
+    --color-aero-500: hsl(193, 80%, 50%);
+    --color-aero-600: hsl(195, 89%, 39%);
+    --color-aero-700: hsl(196, 88%, 32%);
+    --color-aero-800: hsl(196, 81%, 27%);
+    --color-aero-900: hsl(196, 72%, 24%);
+    --color-aero-950: hsl(199, 73%, 16%);
 }
