@@ -1,6 +1,23 @@
-﻿<div class="w-full bg-yellow-100 p-4">
+﻿@inject IServiceScopeFactory ScopeFactory
+
+<div class="w-full bg-yellow-100 p-4 flex flex-col gap-y-4">
     <div class="flex items-center gap-x-4">
-        <span class="text-3xl">@MonitoredService.Name</span>
+        <span class="text-3xl">@MonitoredService.Name | @_uptimePercentage%</span>
         <div class="rounded-full w-4 h-4 @(_wasLastCheckSuccessful ? "bg-green-500" : "bg-red-500")"></div>
+    </div>
+    <div class="h-8 flex gap-x-1">
+        @foreach (var status in _dayStatuses.AsEnumerable().Reverse())
+        {
+            string colorClass = status switch
+            {
+                DayStatus.Empty => "bg-gray-300",
+                DayStatus.Failed => "bg-red-300",
+                DayStatus.Partially => "bg-amber-300",
+                DayStatus.Working => "bg-green-500",
+                _ => ""
+            };
+            
+            <div class="rounded-full w-2 h-full @colorClass"></div>
+        }
     </div>
 </div>

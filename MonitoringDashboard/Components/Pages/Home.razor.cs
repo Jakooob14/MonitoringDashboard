@@ -42,11 +42,9 @@ public partial class Home : IAsyncDisposable
     {
         using var scope = ScopeFactory.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
+        
         _monitoredServices = await db.MonitoredServices
             .OrderByDescending(m => m.Name)
-            .Include(m => m.Checks.OrderByDescending(c => c.CheckedAt).Take(5))
-            .AsNoTracking()
             .ToListAsync();
     }
     
