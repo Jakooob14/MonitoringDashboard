@@ -9,35 +9,15 @@
 
 <PageTitle>Home</PageTitle>
 
-<section>
+<section class="container mx-auto mt-12">
     <h2 class="text-2xl">Monitored services</h2>
     
     <NavLink href="/add-monitored-service">Add monitored service</NavLink>
     
-    <div class="flex flex-col">
+    <div class="flex flex-col gap-y-4 mt-4">
         @foreach(var monitoredService in _monitoredServices)
         {
             <MonitoredServiceCard MonitoredService="monitoredService" />
-            @* <button @onclick="() => CheckServiceNow(monitoredService)">Check</button> *@
-        
-        
-        
-            @* <div class="flex flex-col gap-y-4"> *@
-            @*     @foreach(var check in monitoredService.Checks.OrderByDescending(c => c.CheckedAt).Take(5)) *@
-            @*     { *@
-            @*         <div class="ml-4 @(check.IsSuccessful ? "bg-green-100" : "bg-red-100") p-2 rounded"> *@
-            @*             <span>Status: @(check.IsSuccessful ? "Successful" : "Failed")</span> *@
-            @*             <br/> *@
-            @*             <span>Response Time: @check.ResponseTimeMilliseconds ms</span> *@
-            @*             <br/> *@
-            @*             <span>Status Code: @(check.StatusCode != 0 ? check.StatusCode.ToString() : "N/A")</span> *@
-            @*             <br/> *@
-            @*             <span>Status Message: @(check.ResponseContentSnippet ?? "None")</span> *@
-            @*             <br/> *@
-            @*             <span>Checked At: @check.CheckedAt.ToLocalTime()</span> *@
-            @*         </div> *@
-            @*     } *@
-            @* </div> *@
         }
     </div>
 </section>

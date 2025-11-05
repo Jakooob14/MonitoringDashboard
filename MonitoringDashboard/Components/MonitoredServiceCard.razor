@@ -1,23 +1,30 @@
 ﻿@inject IServiceScopeFactory ScopeFactory
+@inject IJSRuntime JS
 
-<div class="w-full bg-yellow-100 p-4 flex flex-col gap-y-4">
+<div class="w-full bg-zinc-800 p-4 flex flex-col gap-y-4 rounded-xl shadow-lg" id="MonitoredServiceCard-@MonitoredService.Id">
     <div class="flex items-center gap-x-4">
-        <span class="text-3xl">@MonitoredService.Name | @_uptimePercentage%</span>
+        <span class="text-3xl">@MonitoredService.Name | @GetUptimePercentage()%</span>
         <div class="rounded-full w-4 h-4 @(_wasLastCheckSuccessful ? "bg-green-500" : "bg-red-500")"></div>
     </div>
-    <div class="h-8 flex gap-x-1">
+    <div class="h-8 flex gap-x-[4px]
+            max-xs:[&>div:nth-child(-n+70)]:hidden
+            max-lg:[&>div:nth-child(-n+60)]:hidden
+            max-3xl:[&>div:nth-child(-n+50)]:hidden">
         @foreach (var status in _dayStatuses.AsEnumerable().Reverse())
         {
             string colorClass = status switch
             {
-                DayStatus.Empty => "bg-gray-300",
-                DayStatus.Failed => "bg-red-300",
+                DayStatus.Empty => "bg-zinc-600",
+                DayStatus.Failed => "bg-red-400",
                 DayStatus.Partially => "bg-amber-300",
                 DayStatus.Working => "bg-green-500",
                 _ => ""
             };
-            
-            <div class="rounded-full w-2 h-full @colorClass"></div>
+        
+            <div class="rounded-full flex-1 h-full @colorClass"></div>
         }
+    </div>
+    <div class="text-zinc-300">
+        <span class="text-inherit">@GetLastIncidentString()</span>
     </div>
 </div>

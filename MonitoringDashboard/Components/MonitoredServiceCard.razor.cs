@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
 using MonitoringDashboard.Data;
 using MonitoringDashboard.Data.Models;
 
@@ -12,7 +13,6 @@ public partial class MonitoredServiceCard : ComponentBase
     private bool _wasLastCheckSuccessful;
     private List<DayStatus> _dayStatuses = new();
     private List<ServiceCheck> _recentChecks = new();
-    private float _uptimePercentage;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -31,12 +31,11 @@ public partial class MonitoredServiceCard : ComponentBase
         _wasLastCheckSuccessful = lastCheck.IsSuccessful;
         
         UpdateRecentChecks();
-        CalculateUptimePercentage();
     }
     
     private void UpdateRecentChecks()
     {
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < 90; i++)
         {
             var utcNow = DateTime.UtcNow;
             var startOfDay = utcNow.Date.AddDays(-i);
@@ -67,18 +66,47 @@ public partial class MonitoredServiceCard : ComponentBase
         }
     }
     
-    private void CalculateUptimePercentage()
+    private float GetUptimePercentage()
     {
         if (_recentChecks.Count == 0)
         {
-            _uptimePercentage = 0;
-            return;
+            return 0;
         }
         
         int successfulChecks = _recentChecks.Count(c => c.IsSuccessful);
         float percentage = (float)successfulChecks / _recentChecks.Count * 100;
         
-        _uptimePercentage = (float)Math.Round(percentage, 3);
+        return (float)Math.Round(percentage, 3);
+    }
+    
+    private string GetLastIncidentString()
+    {
+        var lastFailedCheck = _recentChecks
+            .Where(c => !c.IsSuccessful)
+            .OrderByDescending(c => c.CheckedAt)
+            .FirstOrDefault();
+
+        if (lastFailedCheck == null)
+        {
+            return "No incidents recently";
+        }
+
+        var timeSpan = DateTime.UtcNow - lastFailedCheck.CheckedAt;
+        
+        if (timeSpan.TotalDays >= 1)
+        {
+            return $"Last incident {(int)timeSpan.TotalDays} days ago";
+        }
+        if (timeSpan.TotalHours >= 1)
+        {
+            return $"Last incident {(int)timeSpan.TotalHours} hours ago";
+        }
+        if (timeSpan.TotalMinutes >= 1)
+        {
+            return $"Last incident {(int)timeSpan.TotalMinutes} minutes ago";
+        }
+        
+        return "Last incident just now";
     }
 }
 
