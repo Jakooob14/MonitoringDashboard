@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using MonitoringDashboard.Components.Records.Events;
 using MonitoringDashboard.Hubs;
 
 namespace MonitoringDashboard.Services;
@@ -42,7 +43,12 @@ public class MonitoringWorker(
                     db.ServiceChecks.Add(check);
                     await db.SaveChangesAsync(stoppingToken);
                     
-                    await hubContext.Clients.All.SendAsync("ServiceChecked", cancellationToken: stoppingToken);
+                    var evt = new ServiceCheckedEvent(
+                        ServiceId: service.Id,
+                        IsSuccessful: check.IsSuccessful,
+                        CheckedAt: check.CheckedAt);
+                    
+                    await hubContext.Clients.All.SendAsync("ServiceChecked", evt, cancellationToken: stoppingToken);
                 }
             }
             catch (Exception e)

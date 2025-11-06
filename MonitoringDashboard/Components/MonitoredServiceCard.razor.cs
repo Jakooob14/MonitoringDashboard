@@ -1,18 +1,45 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
+using MonitoringDashboard.Components.Records.Events;
 using MonitoringDashboard.Data;
 using MonitoringDashboard.Data.Models;
 
 namespace MonitoringDashboard.Components;
 
-public partial class MonitoredServiceCard : ComponentBase
+public partial class MonitoredServiceCard : ComponentBase, IAsyncDisposable
 {
     [Parameter] public required MonitoredService MonitoredService { get; set; }
 
-    private bool _wasLastCheckSuccessful;
     private List<DayStatus> _dayStatuses = new();
     private List<ServiceCheck> _recentChecks = new();
+    
+    private HubConnection? _hubConnection;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_hubConnection != null) await _hubConnection.DisposeAsync();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/hubs/monitoring"))
+            .WithAutomaticReconnect()
+            .Build();
+
+        _hubConnection.On<ServiceCheckedEvent>("ServiceChecked", async (evt) =>
+        {
+            if (evt.ServiceId == MonitoredService.Id)
+            {
+                OnNewCheck(evt.IsSuccessful, evt.CheckedAt);
+                await InvokeAsync(StateHasChanged);
+            }
+        });
+        
+        await _hubConnection.StartAsync();
+    }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -25,10 +52,6 @@ public partial class MonitoredServiceCard : ComponentBase
             .ToListAsync();
         
         _dayStatuses.Clear();
-        
-        var lastCheck = _recentChecks.LastOrDefault();
-        if (lastCheck == null) return;
-        _wasLastCheckSuccessful = lastCheck.IsSuccessful;
         
         UpdateRecentChecks();
     }
@@ -66,6 +89,12 @@ public partial class MonitoredServiceCard : ComponentBase
         }
     }
     
+    private bool IsServiceUp()
+    {
+        var lastCheck = _recentChecks.FirstOrDefault();
+        return lastCheck is { IsSuccessful: true };
+    }
+    
     private float GetUptimePercentage()
     {
         if (_recentChecks.Count == 0)
@@ -95,18 +124,34 @@ public partial class MonitoredServiceCard : ComponentBase
         
         if (timeSpan.TotalDays >= 1)
         {
-            return $"Last incident {(int)timeSpan.TotalDays} days ago";
+            return $"Last incident {(int)timeSpan.TotalDays} day{(timeSpan.TotalDays > 1 ? "s" : "")} ago";
         }
         if (timeSpan.TotalHours >= 1)
         {
-            return $"Last incident {(int)timeSpan.TotalHours} hours ago";
+            return $"Last incident {(int)timeSpan.TotalHours} hour{(timeSpan.TotalHours > 1 ? "s" : "")} ago";
         }
         if (timeSpan.TotalMinutes >= 1)
         {
-            return $"Last incident {(int)timeSpan.TotalMinutes} minutes ago";
+            return $"Last incident {(int)timeSpan.TotalMinutes} minute{(timeSpan.TotalMinutes > 1 ? "s" : "")} ago";
         }
         
         return "Last incident just now";
+    }
+    
+    private void OnNewCheck(bool isSuccessful, DateTime checkedAt)
+    {
+        var newCheck = new ServiceCheck
+        {
+            MonitoredServiceId = MonitoredService.Id,
+            IsSuccessful = isSuccessful,
+            CheckedAt = checkedAt
+        };
+        
+        _recentChecks.Add(newCheck);
+        
+        UpdateRecentChecks();
+
+        StateHasChanged();
     }
 }
 

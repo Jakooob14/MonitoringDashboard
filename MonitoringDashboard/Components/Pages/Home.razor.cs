@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
+using MonitoringDashboard.Components.Records.Events;
 using MonitoringDashboard.Data;
 using MonitoringDashboard.Data.Models;
 
@@ -14,10 +15,7 @@ public partial class Home : IAsyncDisposable
     
     public async ValueTask DisposeAsync()
     {
-        if (_hubConnection is not null)
-        {
-            await _hubConnection.DisposeAsync();
-        }
+        if (_hubConnection != null) await _hubConnection.DisposeAsync();
     }
     
     protected override async Task OnInitializedAsync()
@@ -27,7 +25,7 @@ public partial class Home : IAsyncDisposable
             .WithAutomaticReconnect()
             .Build();
 
-        _hubConnection.On("ServiceChecked", async () =>
+        _hubConnection.On<ServiceCheckedEvent>("ServiceChecked", async (evt) =>
         {
             await UpdateMonitoredServices();
             await InvokeAsync(StateHasChanged);
