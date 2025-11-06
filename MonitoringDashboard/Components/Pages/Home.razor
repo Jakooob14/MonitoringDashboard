@@ -1,15 +1,23 @@
 ﻿@page "/"
+@using MonitoringDashboard.Components.Shared
 @using MonitoringDashboard.Data
 @using MonitoringDashboard.Services
 @inject AppDbContext Db
 @inject ServiceChecker ServiceChecker
-@inject NavigationManager NavigationManager
 @inject IServiceScopeFactory ScopeFactory
 @rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 
 <section class="container mx-auto mt-12">
+    <section class="flex justify-between">
+        <div>
+            <h1 class="text-5xl">Status</h1>
+        </div>
+        <div>
+            <RefreshTimer OnRefresh="StateHasChanged"/>
+        </div>
+    </section>
     <section class="bg-zinc-800 p-6 rounded-sm mt-4 text-2xl font-bold flex justify-center">
         @if (GetFailedServicesCount() > 0)
         {
@@ -21,7 +29,7 @@
             <span>All services are operational</span>
         }
     </section>
-    
+
     <section class="mt-8">
         <h2 class="text-4xl">Services</h2>
         <NavLink href="/add-monitored-service">Add monitored service</NavLink>

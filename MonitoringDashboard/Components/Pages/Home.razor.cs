@@ -1,38 +1,15 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.JSInterop;
-using MonitoringDashboard.Components.Records.Events;
+﻿using Microsoft.EntityFrameworkCore;
 using MonitoringDashboard.Data;
 using MonitoringDashboard.Data.Models;
 
 namespace MonitoringDashboard.Components.Pages;
 
-public partial class Home : IAsyncDisposable
+public partial class Home
 {
     private List<MonitoredService> _monitoredServices = new();
-    private HubConnection? _hubConnection;
-    
-    public async ValueTask DisposeAsync()
-    {
-        if (_hubConnection != null) await _hubConnection.DisposeAsync();
-    }
     
     protected override async Task OnInitializedAsync()
     {
-        _hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri("/hubs/monitoring"))
-            .WithAutomaticReconnect()
-            .Build();
-
-        _hubConnection.On<ServiceCheckedEvent>("ServiceChecked", async (evt) =>
-        {
-            await UpdateMonitoredServices();
-            await InvokeAsync(StateHasChanged);
-        });
-
-        await _hubConnection.StartAsync();
-        
         await UpdateMonitoredServices();
     }
 

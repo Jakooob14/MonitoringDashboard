@@ -6,40 +6,14 @@ using MonitoringDashboard.Components.Records.Events;
 using MonitoringDashboard.Data;
 using MonitoringDashboard.Data.Models;
 
-namespace MonitoringDashboard.Components;
+namespace MonitoringDashboard.Components.Shared;
 
-public partial class MonitoredServiceCard : ComponentBase, IAsyncDisposable
+public partial class MonitoredServiceCard : ComponentBase
 {
     [Parameter] public required MonitoredService MonitoredService { get; set; }
 
     private List<DayStatus> _dayStatuses = new();
     private List<ServiceCheck> _recentChecks = new();
-    
-    private HubConnection? _hubConnection;
-
-    public async ValueTask DisposeAsync()
-    {
-        if (_hubConnection != null) await _hubConnection.DisposeAsync();
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        _hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri("/hubs/monitoring"))
-            .WithAutomaticReconnect()
-            .Build();
-
-        _hubConnection.On<ServiceCheckedEvent>("ServiceChecked", async (evt) =>
-        {
-            if (evt.ServiceId == MonitoredService.Id)
-            {
-                OnNewCheck(evt.IsSuccessful, evt.CheckedAt);
-                await InvokeAsync(StateHasChanged);
-            }
-        });
-        
-        await _hubConnection.StartAsync();
-    }
 
     protected override async Task OnParametersSetAsync()
     {

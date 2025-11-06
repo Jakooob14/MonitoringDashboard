@@ -2,7 +2,6 @@ using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using MonitoringDashboard.Components;
 using MonitoringDashboard.Data;
-using MonitoringDashboard.Hubs;
 using MonitoringDashboard.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,7 +51,5 @@ app.UseAntiforgery();
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
-
-app.MapHub<MonitoringHub>("/hubs/monitoring");
 
 app.Run();
