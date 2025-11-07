@@ -17,11 +17,12 @@
             _ => ""
         };
 
-        <div class="rounded-xs flex-1 h-full @colorClass"></div>
+        <div class="rounded-xs h-full @colorClass" style="flex: @(FixedBarWidth == null ? 1 : null); width: @(FixedBarWidth == null ? "auto" : FixedBarWidth + "px");"></div>
     }
 </div>
 
 @code {
     [Parameter, EditorRequired] public required IEnumerable<Status> Statuses { get; set; }
     [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+    [Parameter] public int? FixedBarWidth { get; set; }
 }

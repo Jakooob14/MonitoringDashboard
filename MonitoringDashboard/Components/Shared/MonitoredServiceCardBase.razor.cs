@@ -10,6 +10,8 @@ public partial class MonitoredServiceCardBase : ComponentBase
 {
     [Parameter] public required MonitoredService MonitoredService { get; set; }
     [Inject] public IServiceScopeFactory ScopeFactory { get; set; } = null!;
+    
+    protected int RecentDaysToShow { get; set; } = 90;
 
     protected List<Status> DayStatuses { get; private set; } = new();
     private List<ServiceCheck> _recentChecks = new();
@@ -108,7 +110,7 @@ public partial class MonitoredServiceCardBase : ComponentBase
     
     private void UpdateRecentChecks()
     {
-        for (int i = 0; i < 90; i++)
+        for (int i = 0; i < RecentDaysToShow; i++)
         {
             var utcNow = DateTime.UtcNow;
             var startOfDay = utcNow.Date.AddDays(-i);

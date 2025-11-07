@@ -1,6 +1,16 @@
-﻿@inherits MonitoringDashboard.Components.Shared.MonitoredServiceCardBase
+﻿@using MonitoringDashboard.Components.Shared
+@inherits MonitoringDashboard.Components.Shared.MonitoredServiceCardBase
 
 <div class="bg-zinc-800 p-6 rounded-sm flex items-center gap-4 @(IsServiceUp() ? "border-s-green-500" : "border-s-red-500")">
     <h2 class="text-2xl font-bold">@MonitoredService.Name</h2>
     <span>@GetFormattedUptime()</span>
+    <ServiceStatusBar Statuses="DayStatuses" FixedBarWidth="5"/>
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        RecentDaysToShow = 30;
+    }
+
+}
