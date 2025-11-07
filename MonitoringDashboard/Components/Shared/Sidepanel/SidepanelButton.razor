@@ -1,1 +1,3 @@
-﻿<button class="flex flex-row items-center gap-2 hover:bg-zinc-900 transition-colors w-full p-3 rounded-sm"><Icon Path="icons/service.svg"/> @Text</button>
+﻿@inject NavigationManager Nav
+
+<button class="flex flex-row items-center gap-2 hover:bg-zinc-900 transition-colors w-full p-3 rounded-sm cursor-pointer @GetClass()" @onclick="OnClick"><Icon Path="icons/service.svg"/> @Text</button>
