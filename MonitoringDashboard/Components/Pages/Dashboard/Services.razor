@@ -1,0 +1,14 @@
+﻿@page "/dashboard/services"
+@layout DashboardLayout
+@inject AppDbContext Db
+
+<section>
+    <h1 class="text-5xl">Services</h1>
+    
+    <ul>
+        @foreach(var service in _monitoredServices)
+        {
+            <li class="my-4"><MonitoredServiceDashboardCard MonitoredService="service"/></li>
+        }
+    </ul>
+</section>

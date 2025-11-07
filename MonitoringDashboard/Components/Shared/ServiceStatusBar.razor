@@ -1,0 +1,27 @@
+﻿@using MonitoringDashboard.Components.Shared.Enums
+
+<div class="h-8 flex gap-x-[4px]
+            max-xs:[&>div:nth-child(-n+70)]:hidden
+            max-lg:[&>div:nth-child(-n+60)]:hidden
+            max-3xl:[&>div:nth-child(-n+50)]:hidden
+            @(AdditionalAttributes?.TryGetValue("class", out var attribute) == true ? attribute : "")"
+            @attributes="AdditionalAttributes">
+    @foreach (var status in Statuses.AsEnumerable().Reverse())
+    {
+        string colorClass = status switch
+        {
+            Status.Empty => "bg-zinc-600",
+            Status.Failed => "bg-red-400",
+            Status.Degraded => "bg-amber-300",
+            Status.Working => "bg-green-500",
+            _ => ""
+        };
+
+        <div class="rounded-xs flex-1 h-full @colorClass"></div>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public required IEnumerable<Status> Statuses { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+}

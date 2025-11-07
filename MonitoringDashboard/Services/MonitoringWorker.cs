@@ -37,6 +37,13 @@ public class MonitoringWorker(
                     check.MonitoredServiceId = service.Id;
 
                     db.ServiceChecks.Add(check);
+                    
+                    if (!check.IsSuccessful)
+                    {
+                        service.LastDowntimeAt = DateTime.UtcNow;
+                        db.MonitoredServices.Update(service);
+                    }
+                    
                     await db.SaveChangesAsync(stoppingToken);
                 }
             }

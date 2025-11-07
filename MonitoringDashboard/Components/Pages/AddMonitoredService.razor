@@ -26,17 +26,3 @@
     </div>
     <button type="submit">Submit</button>
 </EditForm>
-
-@code
-{
-    [SupplyParameterFromForm] private Data.Models.MonitoredService NewMonitoredService { get; set; } = new();
-    
-    private async Task AddService()
-    {
-        NewMonitoredService.CreatedAt = DateTime.UtcNow;
-        
-        Db.MonitoredServices.Add(NewMonitoredService);
-        await Db.SaveChangesAsync();
-        NewMonitoredService = new();
-    }
-}

@@ -10,6 +10,7 @@ public class MonitoredService
     [Range(5, int.MaxValue)] public int CheckIntervalSeconds { get; set; } = 60;
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime LastDowntimeAt { get; set; } = DateTime.UtcNow;
     
     public ICollection<ServiceCheck> Checks { get; set; } = new List<ServiceCheck>();
 }

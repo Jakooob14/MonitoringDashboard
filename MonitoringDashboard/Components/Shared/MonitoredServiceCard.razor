@@ -1,4 +1,4 @@
-﻿@inject IServiceScopeFactory ScopeFactory
+﻿@inherits MonitoredServiceCardBase
 
 <div class="relative w-full bg-neutral-800 p-4 flex flex-col gap-y-4 rounded-sm shadow-lg border-s-4 @(IsServiceUp() ? "border-s-green-500" : "border-s-red-500")" id="MonitoredServiceCard-@MonitoredService.Id">
     @* <div class="absolute -left-2 top-0 h-full w-2 blur-sm opacity-30" style="background:@(_wasLastCheckSuccessful ? "rgb(34,197,94)" : "rgb(239,68,68)");"></div> *@
@@ -6,24 +6,7 @@
         <span class="text-2xl">@MonitoredService.Name</span>
         @* <div class="rounded-full w-4 h-4 @(_wasLastCheckSuccessful ? "bg-green-500" : "bg-red-500")"></div> *@
     </div>
-    <div class="h-8 flex gap-x-[4px]
-            max-xs:[&>div:nth-child(-n+70)]:hidden
-            max-lg:[&>div:nth-child(-n+60)]:hidden
-            max-3xl:[&>div:nth-child(-n+50)]:hidden">
-        @foreach (var status in _dayStatuses.AsEnumerable().Reverse())
-        {
-            string colorClass = status switch
-            {
-                DayStatus.Empty => "bg-zinc-600",
-                DayStatus.Failed => "bg-red-400",
-                DayStatus.Degraded => "bg-amber-300",
-                DayStatus.Working => "bg-green-500",
-                _ => ""
-            };
-
-            <div class="rounded-xs flex-1 h-full @colorClass"></div>
-        }
-    </div>
+    <ServiceStatusBar Statuses="DayStatuses"/>
     <div class="text-zinc-400 flex justify-between">
         <span class="text-inherit">@GetLastIncidentString()</span>
         <span class="text-inherit">@GetUptimePercentage()% availability</span>
