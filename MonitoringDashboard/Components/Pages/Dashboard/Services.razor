@@ -6,11 +6,11 @@
 
 <section>
     <h1 class="text-5xl">Services</h1>
-    <RefreshTimer OnRefresh="UpdateMonitoredServices"/>
+    @* <RefreshTimer OnRefresh="UpdateMonitoredServices"/> *@
     <ul>
-        @foreach(var service in _monitoredServices)
+        @foreach(var monitoredService in _monitoredServices)
         {
-            <li class="my-4"><MonitoredServiceDashboardCard MonitoredService="service"/></li>
+            <li class="my-4"><MonitoredServiceDashboardCard MonitoredService="monitoredService"/></li>
         }
     </ul>
 </section>

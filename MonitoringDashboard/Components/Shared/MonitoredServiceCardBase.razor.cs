@@ -12,7 +12,6 @@ public partial class MonitoredServiceCardBase : ComponentBase
     [Inject] public IServiceScopeFactory ScopeFactory { get; set; } = null!;
     
     protected int RecentDaysToShow { get; set; } = 90;
-
     protected List<Status> DayStatuses { get; private set; } = new();
     protected bool ServiceUp;
     protected string LastIncidentString = string.Empty;
@@ -23,7 +22,7 @@ public partial class MonitoredServiceCardBase : ComponentBase
     {
         // _isLoading = true;
         ServiceUp = false;
-        DayStatuses = Enumerable.Repeat(Status.Empty, 90).ToList();
+        DayStatuses = Enumerable.Repeat(Status.Empty, RecentDaysToShow).ToList();
         LastIncidentString = "Loading...";
         UptimePercentage = 0f;
     }
@@ -87,9 +86,7 @@ public partial class MonitoredServiceCardBase : ComponentBase
             .Where(c => c.MonitoredServiceId == MonitoredService.Id && c.CheckedAt >= cutoff)
             .OrderByDescending(c => c.CheckedAt)
             .ToListAsync();
-
-        DayStatuses.Clear();
-
+        
         UpdateRecentChecks();
 
         ServiceUp = IsServiceUp();
@@ -130,6 +127,8 @@ public partial class MonitoredServiceCardBase : ComponentBase
     
     private void UpdateRecentChecks()
     {
+        DayStatuses.Clear();
+        
         var utcNow = DateTime.UtcNow.Date;
         for (int i = 0; i < RecentDaysToShow; i++)
         {
