@@ -111,22 +111,6 @@ public partial class MonitoredServiceCard : ComponentBase
         
         return "Last incident just now";
     }
-    
-    private void OnNewCheck(bool isSuccessful, DateTime checkedAt)
-    {
-        var newCheck = new ServiceCheck
-        {
-            MonitoredServiceId = MonitoredService.Id,
-            IsSuccessful = isSuccessful,
-            CheckedAt = checkedAt
-        };
-        
-        _recentChecks.Add(newCheck);
-        
-        UpdateRecentChecks();
-
-        StateHasChanged();
-    }
 }
 
 enum DayStatus

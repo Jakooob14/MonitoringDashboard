@@ -9,8 +9,6 @@ public partial class RefreshTimer : ComponentBase, IDisposable
     private readonly int _timeToRefresh = 60;
     private System.Timers.Timer? _timer;
     private int _remainingTimeToRefresh = 5;
-    
-    private DateTime _ttr;
 
     public void Dispose()
     {
@@ -20,8 +18,6 @@ public partial class RefreshTimer : ComponentBase, IDisposable
     
     protected override void OnInitialized()
     {
-        _ttr = DateTime.UtcNow.AddSeconds(_timeToRefresh);
-        
         _timer = new System.Timers.Timer(1000);
         _timer.Elapsed += async (_, _) =>
         {

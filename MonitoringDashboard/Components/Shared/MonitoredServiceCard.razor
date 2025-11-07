@@ -1,7 +1,4 @@
-﻿@using Microsoft.AspNetCore.SignalR.Client
-@inject IServiceScopeFactory ScopeFactory
-@inject IJSRuntime JS
-@inject NavigationManager NavigationManager
+﻿@inject IServiceScopeFactory ScopeFactory
 
 <div class="relative w-full bg-neutral-800 p-4 flex flex-col gap-y-4 rounded-sm shadow-lg border-s-4 @(IsServiceUp() ? "border-s-green-500" : "border-s-red-500")" id="MonitoredServiceCard-@MonitoredService.Id">
     @* <div class="absolute -left-2 top-0 h-full w-2 blur-sm opacity-30" style="background:@(_wasLastCheckSuccessful ? "rgb(34,197,94)" : "rgb(239,68,68)");"></div> *@
