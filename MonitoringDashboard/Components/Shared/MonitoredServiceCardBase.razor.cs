@@ -14,7 +14,19 @@ public partial class MonitoredServiceCardBase : ComponentBase
     protected int RecentDaysToShow { get; set; } = 90;
 
     protected List<Status> DayStatuses { get; private set; } = new();
+    protected bool ServiceUp;
+    protected string LastIncidentString = string.Empty;
+    protected float UptimePercentage;
     private List<ServiceCheck> _recentChecks = new();
+    
+    protected override void OnInitialized()
+    {
+        // _isLoading = true;
+        ServiceUp = false;
+        DayStatuses = Enumerable.Repeat(Status.Empty, 90).ToList();
+        LastIncidentString = "Loading...";
+        UptimePercentage = 0f;
+    }
     
     protected bool IsServiceUp()
     {
@@ -69,15 +81,23 @@ public partial class MonitoredServiceCardBase : ComponentBase
     {
         using var scope = ScopeFactory.CreateScope();
         await using var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        
+
+        var cutoff = DateTime.UtcNow.AddDays(-RecentDaysToShow);
         _recentChecks = await db.ServiceChecks
-            .Where(c => c.MonitoredServiceId == MonitoredService.Id && c.CheckedAt >= DateTime.UtcNow.AddDays(-30))
+            .Where(c => c.MonitoredServiceId == MonitoredService.Id && c.CheckedAt >= cutoff)
             .OrderByDescending(c => c.CheckedAt)
             .ToListAsync();
-        
+
         DayStatuses.Clear();
-        
+
         UpdateRecentChecks();
+
+        ServiceUp = IsServiceUp();
+        LastIncidentString = GetLastIncidentString();
+        UptimePercentage = GetUptimePercentage();
+
+        // _isLoading = false;
+        StateHasChanged();
     }
     
     protected string GetFormattedUptime()
@@ -110,12 +130,12 @@ public partial class MonitoredServiceCardBase : ComponentBase
     
     private void UpdateRecentChecks()
     {
+        var utcNow = DateTime.UtcNow.Date;
         for (int i = 0; i < RecentDaysToShow; i++)
         {
-            var utcNow = DateTime.UtcNow;
-            var startOfDay = utcNow.Date.AddDays(-i);
-            var endOfDay = startOfDay.Date.AddDays(1);
-            
+            var startOfDay = utcNow.AddDays(-i);
+            var endOfDay = startOfDay.AddDays(1);
+
             var todaysChecks = _recentChecks
                 .Where(c => c.CheckedAt >= startOfDay && c.CheckedAt < endOfDay)
                 .ToList();
@@ -125,16 +145,18 @@ public partial class MonitoredServiceCardBase : ComponentBase
                 DayStatuses.Add(Status.Empty);
                 continue;
             }
-            
+
             int successfulChecks = todaysChecks.Count(c => c.IsSuccessful);
 
             if (successfulChecks == todaysChecks.Count)
             {
                 DayStatuses.Add(Status.Working);
-            } else if ((float)successfulChecks / todaysChecks.Count > 0.75f)
+            }
+            else if ((float)successfulChecks / todaysChecks.Count > 0.75f)
             {
                 DayStatuses.Add(Status.Degraded);
-            } else
+            }
+            else
             {
                 DayStatuses.Add(Status.Failed);
             }
