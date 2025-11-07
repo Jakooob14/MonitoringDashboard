@@ -6,7 +6,7 @@ public partial class RefreshTimer : ComponentBase, IDisposable
 {
     [Parameter] public EventCallback OnRefresh { get; set; }
     
-    private readonly int _timeToRefresh = 5;
+    private readonly int _timeToRefresh = 60;
     private System.Timers.Timer? _timer;
     private int _remainingTimeToRefresh = 5;
     

@@ -55,7 +55,7 @@ public partial class MonitoredServiceCard : ComponentBase
                 _dayStatuses.Add(DayStatus.Working);
             } else if ((float)successfulChecks / todaysChecks.Count > 0.75f)
             {
-                _dayStatuses.Add(DayStatus.Partially);
+                _dayStatuses.Add(DayStatus.Degraded);
             } else
             {
                 _dayStatuses.Add(DayStatus.Failed);
@@ -132,7 +132,7 @@ public partial class MonitoredServiceCard : ComponentBase
 enum DayStatus
 {
     Working,
-    Partially,
+    Degraded,
     Failed,
     Empty
 }
