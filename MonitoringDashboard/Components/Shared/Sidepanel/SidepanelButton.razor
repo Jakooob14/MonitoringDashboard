@@ -1,3 +1,7 @@
 ﻿@inject NavigationManager Nav
 
-<button class="flex flex-row items-center gap-2 hover:bg-zinc-900 transition-colors w-full p-3 rounded-sm cursor-pointer @GetClass()" @onclick="OnClick"><Icon Path="icons/service.svg"/> @Text</button>
+<NavLink 
+    class=@($"flex flex-row items-center gap-2 hover:bg-zinc-900 transition-colors w-full p-3 rounded-sm cursor-pointer text-zinc-100 {(_active ? "bg-zinc-900" : "")}")
+    Href="@Href">
+    <Icon Path="icons/service.svg" class=@(_active ? "text-aero-500" : "") /> @Text
+</NavLink>

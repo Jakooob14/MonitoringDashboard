@@ -11,6 +11,8 @@ public partial class SidepanelButton : ComponentBase, IDisposable
         
     private EventHandler<LocationChangedEventArgs>? _locationChangedHandler;
 
+    private bool _active;
+
     public void Dispose()
     {
         if (_locationChangedHandler != null) Nav.LocationChanged -= _locationChangedHandler;
@@ -20,22 +22,21 @@ public partial class SidepanelButton : ComponentBase, IDisposable
     {
         _locationChangedHandler = (_, __) => StateHasChanged();
         Nav.LocationChanged += _locationChangedHandler;
+
+        _active = IsActive();
     }
     
-    private string GetClass()
+    private bool IsActive()
     {
-        var uri = Nav.Uri;
-        var baseUri = Nav.BaseUri;
-        var relativePath = uri.Replace(baseUri, "", StringComparison.OrdinalIgnoreCase);
+        var currentPath = Nav.ToBaseRelativePath(Nav.Uri)
+            .TrimEnd('/')
+            .ToLowerInvariant();
 
-        // Active if it starts with Href
-        bool isActive = relativePath.StartsWith(Href.TrimStart('/'), StringComparison.OrdinalIgnoreCase);
+        var targetPath = Href.TrimStart('/')
+            .TrimEnd('/')
+            .ToLowerInvariant();
 
-        return isActive ? "bg-zinc-900" : "";
-    }
-    
-    private void OnClick()
-    {
-        Nav.NavigateTo(Href);
+        return currentPath == targetPath ||
+               (string.IsNullOrEmpty(currentPath) && string.IsNullOrEmpty(targetPath));
     }
 }

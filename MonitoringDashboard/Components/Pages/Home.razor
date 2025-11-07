@@ -1,8 +1,6 @@
 ﻿@page "/"
 @using MonitoringDashboard.Components.Shared
-@using MonitoringDashboard.Data
 @using MonitoringDashboard.Services
-@inject AppDbContext Db
 @inject ServiceChecker ServiceChecker
 @inject IServiceScopeFactory ScopeFactory
 @rendermode InteractiveServer
@@ -19,10 +17,9 @@
         </div>
     </section>
     <section class="bg-zinc-800 p-6 rounded-sm mt-4 text-2xl font-bold flex justify-center">
-        @if (GetFailedServicesCount() > 0)
+        @if (_failedServicesCount > 0)
         {
-            int failedCount = GetFailedServicesCount();
-            <span>@failedCount service@(failedCount > 1 ? "s are" : " is") currently down</span>
+            <span>@_failedServicesCount service@(_failedServicesCount > 1 ? "s are" : " is") currently down</span>
         }
         else
         {
