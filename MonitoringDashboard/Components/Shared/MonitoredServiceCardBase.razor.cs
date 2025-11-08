@@ -10,93 +10,142 @@ public partial class MonitoredServiceCardBase : ComponentBase
 {
     [Parameter] public required MonitoredService MonitoredService { get; set; }
     [Inject] public IServiceScopeFactory ScopeFactory { get; set; } = null!;
-    
-    protected int RecentDaysToShow { get; set; } = 90;
-    protected List<Status> DayStatuses { get; private set; } = new();
+
+    [Parameter] public TimeUnit DisplayUnit { get; set; } = TimeUnit.Days;
+    [Parameter] public int RecentUnitsToShow { get; set; } = 90;
+
+    protected List<Status> Statuses { get; private set; } = new();
     protected bool ServiceUp;
     protected string LastIncidentString = string.Empty;
     protected float UptimePercentage;
     private List<ServiceCheck> _recentChecks = new();
-    
+
     protected override void OnInitialized()
     {
-        // _isLoading = true;
         ServiceUp = false;
-        DayStatuses = Enumerable.Repeat(Status.Empty, RecentDaysToShow).ToList();
+        Statuses = Enumerable.Repeat(Status.Empty, RecentUnitsToShow).ToList();
         LastIncidentString = "Loading...";
         UptimePercentage = 0f;
     }
-    
-    protected bool IsServiceUp()
+
+    private bool IsServiceUp()
     {
         var lastCheck = _recentChecks.FirstOrDefault();
         return lastCheck is { IsSuccessful: true };
     }
-    
-    protected float GetUptimePercentage()
+
+    private float GetUptimePercentage()
     {
         if (_recentChecks.Count == 0)
-        {
             return 0;
-        }
-        
+
         int successfulChecks = _recentChecks.Count(c => c.IsSuccessful);
-        float percentage = (float)successfulChecks / _recentChecks.Count * 100;
-        
-        return (float)Math.Round(percentage, 3);
+        return (float)Math.Round((float)successfulChecks / _recentChecks.Count * 100, 3);
     }
-    
-    protected string GetLastIncidentString()
+
+    private string GetLastIncidentString()
     {
         var lastFailedCheck = _recentChecks
             .Where(c => !c.IsSuccessful)
             .OrderByDescending(c => c.CheckedAt)
             .FirstOrDefault();
 
-        if (lastFailedCheck == null)
-        {
-            return "No incidents recently";
-        }
+        if (lastFailedCheck == null) return "No incidents recently";
 
         var timeSpan = DateTime.UtcNow - lastFailedCheck.CheckedAt;
-        
-        if (timeSpan.TotalDays >= 1)
-        {
-            return $"Last incident {(int)timeSpan.TotalDays} day{(timeSpan.TotalDays > 1 ? "s" : "")} ago";
-        }
-        if (timeSpan.TotalHours >= 1)
-        {
-            return $"Last incident {(int)timeSpan.TotalHours} hour{(timeSpan.TotalHours > 1 ? "s" : "")} ago";
-        }
-        if (timeSpan.TotalMinutes >= 1)
-        {
-            return $"Last incident {(int)timeSpan.TotalMinutes} minute{(timeSpan.TotalMinutes > 1 ? "s" : "")} ago";
-        }
-        
+
+        if (timeSpan.TotalDays >= 1) return $"Last incident {(int)timeSpan.TotalDays} day{(timeSpan.TotalDays > 1 ? "s" : "")} ago";
+        if (timeSpan.TotalHours >= 1) return $"Last incident {(int)timeSpan.TotalHours} hour{(timeSpan.TotalHours > 1 ? "s" : "")} ago";
+        if (timeSpan.TotalMinutes >= 1) return $"Last incident {(int)timeSpan.TotalMinutes} minute{(timeSpan.TotalMinutes > 1 ? "s" : "")} ago";
+
         return "Last incident just now";
     }
-    
+
     protected override async Task OnParametersSetAsync()
     {
         using var scope = ScopeFactory.CreateScope();
         await using var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        var cutoff = DateTime.UtcNow.AddDays(-RecentDaysToShow);
+        DateTime cutoff = DisplayUnit switch
+        {
+            TimeUnit.Days => DateTime.UtcNow.AddDays(-RecentUnitsToShow),
+            TimeUnit.Hours => DateTime.UtcNow.AddHours(-RecentUnitsToShow),
+            _ => DateTime.UtcNow.AddDays(-RecentUnitsToShow)
+        };
+
         _recentChecks = await db.ServiceChecks
             .Where(c => c.MonitoredServiceId == MonitoredService.Id && c.CheckedAt >= cutoff)
             .OrderByDescending(c => c.CheckedAt)
             .ToListAsync();
-        
-        UpdateRecentChecks();
+
+        UpdateStatuses();
 
         ServiceUp = IsServiceUp();
         LastIncidentString = GetLastIncidentString();
         UptimePercentage = GetUptimePercentage();
 
-        // _isLoading = false;
         StateHasChanged();
     }
-    
+
+    private void UpdateStatuses()
+    {
+        Statuses.Clear();
+
+        if (DisplayUnit == TimeUnit.Days)
+            UpdateDailyStatuses();
+        else
+            UpdateHourlyStatuses();
+    }
+
+    private void UpdateDailyStatuses()
+    {
+        var utcNow = DateTime.UtcNow.Date;
+
+        for (int i = 0; i < RecentUnitsToShow; i++)
+        {
+            var start = utcNow.AddDays(-i);
+            var end = start.AddDays(1);
+
+            AddStatusRange(start, end);
+        }
+    }
+
+    private void UpdateHourlyStatuses()
+    {
+        var utcNow = DateTime.UtcNow;
+
+        for (int i = 0; i < RecentUnitsToShow; i++)
+        {
+            var start = utcNow.AddHours(-i - 1);
+            var end = utcNow.AddHours(-i);
+
+            AddStatusRange(start, end);
+        }
+    }
+
+    private void AddStatusRange(DateTime start, DateTime end)
+    {
+        var checks = _recentChecks.Where(c => c.CheckedAt >= start && c.CheckedAt < end).ToList();
+
+        if (!checks.Any())
+        {
+            Statuses.Add(Status.Empty);
+            return;
+        }
+
+        int successCount = checks.Count(c => c.IsSuccessful);
+        float ratio = (float)successCount / checks.Count;
+
+        Status status = ratio switch
+        {
+            1f => Status.Working,
+            > 0.75f => Status.Degraded,
+            _ => Status.Failed
+        };
+
+        Statuses.Add(status);
+    }
+
     protected string GetFormattedUptime()
     {
         var lastDowntime = MonitoredService.LastDowntimeAt;
@@ -124,41 +173,10 @@ public partial class MonitoredServiceCardBase : ComponentBase
 
         return formatted;
     }
-    
-    private void UpdateRecentChecks()
-    {
-        DayStatuses.Clear();
-        
-        var utcNow = DateTime.UtcNow.Date;
-        for (int i = 0; i < RecentDaysToShow; i++)
-        {
-            var startOfDay = utcNow.AddDays(-i);
-            var endOfDay = startOfDay.AddDays(1);
+}
 
-            var todaysChecks = _recentChecks
-                .Where(c => c.CheckedAt >= startOfDay && c.CheckedAt < endOfDay)
-                .ToList();
-
-            if (!todaysChecks.Any())
-            {
-                DayStatuses.Add(Status.Empty);
-                continue;
-            }
-
-            int successfulChecks = todaysChecks.Count(c => c.IsSuccessful);
-
-            if (successfulChecks == todaysChecks.Count)
-            {
-                DayStatuses.Add(Status.Working);
-            }
-            else if ((float)successfulChecks / todaysChecks.Count > 0.75f)
-            {
-                DayStatuses.Add(Status.Degraded);
-            }
-            else
-            {
-                DayStatuses.Add(Status.Failed);
-            }
-        }
-    }
+public enum TimeUnit
+{
+    Days,
+    Hours
 }

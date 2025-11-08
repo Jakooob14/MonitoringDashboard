@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace MonitoringDashboard.Components.Pages;
+namespace MonitoringDashboard.Components.Pages.Dashboard.Services;
 
 public partial class AddMonitoredService
 {

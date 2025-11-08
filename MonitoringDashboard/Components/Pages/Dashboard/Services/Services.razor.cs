@@ -2,7 +2,7 @@
 using MonitoringDashboard.Data;
 using MonitoringDashboard.Data.Models;
 
-namespace MonitoringDashboard.Components.Pages.Dashboard;
+namespace MonitoringDashboard.Components.Pages.Dashboard.Services;
 
 public partial class Services
 {

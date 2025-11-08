@@ -8,14 +8,6 @@
         <span class="text-zinc-400">@GetFormattedUptime()</span>
     </div>
     <div>
-        <ServiceStatusBar Statuses="DayStatuses" FixedBarWidth="5"/>
+        <ServiceStatusBar Statuses="Statuses" FixedBarWidth="5"/>
     </div>
 </div>
-
-@code {
-    protected override void OnInitialized()
-    {
-        RecentDaysToShow = 30;
-        base.OnInitialized();
-    }
-}
