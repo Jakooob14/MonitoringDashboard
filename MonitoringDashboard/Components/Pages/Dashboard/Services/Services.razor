@@ -5,8 +5,15 @@
 @rendermode InteractiveServer
 
 <section>
-    <h1 class="text-5xl">Services</h1>
-    <RefreshTimer OnRefresh="UpdateMonitoredServices"/>
+    <div class="flex justify-between items-end mb-6">
+        <div>
+            <h1 class="text-5xl">Services</h1>
+            <RefreshTimer OnRefresh="UpdateMonitoredServices"/>
+        </div>
+        <div>
+            <NavLink Href="/dashboard/services/add">Add</NavLink>
+        </div>
+    </div>
     <ul>
         @foreach(var monitoredService in _monitoredServices)
         {

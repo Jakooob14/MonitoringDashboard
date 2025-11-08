@@ -15,13 +15,13 @@ h1:focus {
     outline: none;
 }
 
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
-}
+/*.valid.modified:not([type=checkbox]) {*/
+/*    outline: 1px solid #26b050;*/
+/*}*/
 
-.invalid {
-    outline: 1px solid #e50000;
-}
+/*.invalid {*/
+/*    outline: 1px solid #e50000;*/
+/*}*/
 
 .validation-message {
     color: #e50000;
@@ -58,6 +58,17 @@ h1:focus {
     
     a {
         @apply text-aero-400 hover:text-aero-300 transition-colors;
+    }
+}
+
+@layer components {
+    .input {
+        @apply bg-zinc-800 border-zinc-600 border-[1px] text-zinc-100 placeholder:text-zinc-500 focus:border-aero-400 outline-0 px-4 py-2 rounded-sm transition;
+    }
+
+    .input:has(input.invalid),
+    input.input.invalid {
+        @apply border-red-500 bg-red-950/40;
     }
 }
 

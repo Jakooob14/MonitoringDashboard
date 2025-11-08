@@ -6,9 +6,9 @@ public class MonitoredService
 {
     [Key] public Guid Id { get; set; } = Guid.NewGuid();
     [Required, MaxLength(128)] public string Name { get; set; } = string.Empty;
-    [MaxLength(1024)] public string Url { get; set; } = string.Empty;
-    [Range(5, int.MaxValue)] public int CheckIntervalSeconds { get; set; } = 60;
-    public bool IsActive { get; set; } = true;
+    [Required, MaxLength(1024)] public string Url { get; set; } = string.Empty;
+    [Required, Range(5, int.MaxValue)] public int CheckIntervalSeconds { get; set; } = 60;
+    [Required] public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime LastDowntimeAt { get; set; } = DateTime.UtcNow;
     

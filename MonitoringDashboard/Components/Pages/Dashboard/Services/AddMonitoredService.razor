@@ -1,28 +1,37 @@
 ﻿@page "/dashboard/services/add"
-@using MonitoringDashboard.Data
-@inject AppDbContext Db
+@layout DashboardLayout
+@inject IServiceScopeFactory ScopeFactory
+@rendermode InteractiveServer
 
 <h3>Add Monitored Service</h3>
 
-<EditForm FormName="create" Model="NewMonitoredService" OnValidSubmit="AddService">
+<EditForm FormName="create" Model="NewMonitoredService" OnValidSubmit="AddService" class="flex flex-col gap-4">
     <DataAnnotationsValidator/>
-    <ValidationSummary/>
     
-    <div class="mb-3">
-        <label for="name">Name</label>
-        <InputText id="name" class="border-2 p-2" @bind-Value="NewMonitoredService.Name" />
+    <div class="flex gap-4">
+        <div class="flex flex-col w-full">
+            <label for="name">Name</label>
+            <span class="input flex items-center gap-2">
+                <InputText id="name" class="w-full h-full outline-0" @bind-Value="NewMonitoredService.Name" />
+                <span class="cursor-pointer" @onclick="SetNameAsRandomPhrase">🎲</span>
+            </span>
+            <ValidationMessage For="@(() => NewMonitoredService.Name)" />
+        </div>
+        <div class="flex flex-col w-full">
+            <label for="url">Url</label>
+            <InputText id="url" class="input" @bind-Value="NewMonitoredService.Url" />
+            <ValidationMessage For="@(() => NewMonitoredService.Url)" />
+        </div>
     </div>
-    <div>
-        <label for="url">Url</label>
-        <InputText id="url" class="border-2 p-2" @bind-Value="NewMonitoredService.Url" />
-    </div>
-    <div>
+    <div class="flex flex-col w-full">
         <label for="checkIntervalSeconds">Check interval seconds</label>
-        <InputNumber id="checkIntervalSeconds" class="border-2 p-2" @bind-Value="NewMonitoredService.CheckIntervalSeconds" />
+        <InputNumber id="checkIntervalSeconds" class="input" @bind-Value="NewMonitoredService.CheckIntervalSeconds" />
+        <ValidationMessage For="@(() => NewMonitoredService.CheckIntervalSeconds)" />
     </div>
     <div>
         <label for="isActive">Is Active</label>
-        <InputCheckbox id="isActive" class="border-2 p-2" @bind-Value="NewMonitoredService.IsActive" />
+        <InputCheckbox id="isActive" class="input" @bind-Value="NewMonitoredService.IsActive" />
+        <ValidationMessage For="@(() => NewMonitoredService.IsActive)" />
     </div>
-    <button type="submit">Submit</button>
+    <button type="submit" class="input">Submit</button>
 </EditForm>
