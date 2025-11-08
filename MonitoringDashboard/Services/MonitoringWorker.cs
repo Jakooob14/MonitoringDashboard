@@ -43,9 +43,8 @@ public class MonitoringWorker(
                         service.LastDowntimeAt = DateTime.UtcNow;
                         db.MonitoredServices.Update(service);
                     }
-                    
-                    await db.SaveChangesAsync(stoppingToken);
                 }
+                await db.SaveChangesAsync(stoppingToken);
             }
             catch (Exception e)
             {
