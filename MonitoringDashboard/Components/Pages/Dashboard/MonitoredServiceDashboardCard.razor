@@ -8,38 +8,19 @@
         @* <span class="text-zinc-400 bg-[hsl(240,4%,20%)] border-[1px] border-zinc-600 px-2 rounded-sm">HTTP</span> *@
         <span class="text-zinc-400">@GetFormattedUptime()</span>
     </div>
-    <div class="flex">
+    <div class="flex items-center gap-4">
         <ServiceStatusBar Statuses="Statuses" FixedBarWidth="5"/>
         <div class="relative">
-            <div @onclick="ToggleContextMenu">...</div>
+            <div @onclick="ToggleContextMenu" class="button-primary !p-1"><Icon Path="icons/ellipsis.svg"/></div>
             <ContextMenu style=@($"display: {(_contextMenuOpen ? "block" : "none")}") Items="_contextMenuItems" OnClose="() => _contextMenuOpen = false" />
         </div>
     </div>
 </div>
 
-@code {
-    private bool _contextMenuOpen = false;
-
-    private List<ContextMenu.ContextMenuItem> _contextMenuItems = [];
-
-    protected override void OnInitialized()
-    {
-        _contextMenuItems =
-        [
-            new ContextMenu.ContextMenuItem
-            {
-                Text = "Edit",
-                OnClick = () => Nav.NavigateTo($"/dashboard/services/edit/{MonitoredService.Id}")
-            },
-            new ContextMenu.ContextMenuItem
-            {
-                Text = "Delete"
-            }
-        ];
-    }
-
-    private void ToggleContextMenu()
-    {
-        _contextMenuOpen = !_contextMenuOpen;
-    }
-}
+<Modal @bind-IsOpen="_deleteModalOpen" 
+       Title="Delete Service" 
+       OnConfirm="HandleDeleteConfirm" 
+       ConfirmButtonText="Delete"
+       ConfirmButtonClass="bg-red-500 hover:bg-red-600 !text-zinc-100">
+    <p>Are you sure you want to delete this service?</p>
+</Modal>

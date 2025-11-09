@@ -16,6 +16,7 @@ public partial class ContextMenu : ComponentBase
     public class ContextMenuItem
     {
         public string Text { get; set; } = string.Empty;
+        public string IconPath { get; set; } = string.Empty;
         public Action? OnClick { get; set; }
         public bool Disabled { get; set; }
     }
@@ -25,5 +26,13 @@ public partial class ContextMenu : ComponentBase
         await OnClose.InvokeAsync(null);
         await Task.Delay(50);
         await JS.InvokeVoidAsync("simulateClick", e.ClientX, e.ClientY);
+    }
+    
+    private async Task HandleItemClick(ContextMenuItem item)
+    {
+        if (item.Disabled) return;
+        
+        await OnClose.InvokeAsync(null);
+        item.OnClick?.Invoke();
     }
 }

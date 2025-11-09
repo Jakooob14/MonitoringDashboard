@@ -63,12 +63,20 @@ h1:focus {
 
 @layer components {
     .input {
-        @apply bg-zinc-800 border-zinc-600 border-[1px] text-zinc-100 placeholder:text-zinc-500 focus:border-aero-400 outline-0 px-4 py-2 rounded-sm transition;
+        @apply bg-zinc-800 hover:bg-zinc-700 border-zinc-600 border-[1px] text-zinc-100 placeholder:text-zinc-500 focus:border-aero-400 outline-0 px-4 py-2 rounded-sm transition;
     }
 
     .input:has(input.invalid),
     input.input.invalid {
         @apply border-red-500 bg-red-950/40;
+    }
+    
+    .button-primary {
+        @apply bg-zinc-800 hover:bg-zinc-700 border-zinc-600 border-[1px] text-zinc-100 px-4 py-2 rounded-sm transition;
+    }
+    
+    .shadow-uniform {
+        box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.2);
     }
 }
 

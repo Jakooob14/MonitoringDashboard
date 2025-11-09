@@ -1,13 +1,21 @@
 ﻿@inject IJSRuntime JS
 
 <div @attributes="AdditionalAttributes">
-    <div class="absolute -top-4 -left-4 bg-red-900 p-4 z-[3000]">
+    <div class="absolute top-0 left-0 bg-zinc-800 shadow-uniform p-2 z-[3000] rounded-sm">
         @foreach (var item in Items)
         {
-            <div class="p-2 hover:bg-neutral-700 cursor-pointer"
-                 @onclick="() => { if (!item.Disabled && item.OnClick != null) item.OnClick(); }">
+            <div class="p-2 hover:bg-neutral-700 cursor-pointer rounded-sm flex items-center gap-2 @(item.Disabled ? "opacity-50 cursor-not-allowed" : "")"
+                 @onclick="() => HandleItemClick(item)">
+                @if (item.IconPath != string.Empty)
+                {
+                    <Icon Path="@item.IconPath" Class="w-5 h-5" />
+                }
                 @item.Text
             </div>
+            @if (item != Items.Last())
+            {
+                <hr class="border-zinc-600 my-2" />
+            }
         }
     </div>
     <div class="fixed inset-0 top-0 left-0 w-screen h-screen z-[2000]" @onclick="CloseMenu"></div>

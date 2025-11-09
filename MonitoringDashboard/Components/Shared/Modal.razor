@@ -1,0 +1,25 @@
+﻿@if (IsOpen)
+{
+    <div class="fixed inset-0 bg-black/50 z-[10000]" @onclick="Close">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+                    bg-zinc-800 p-6 rounded-lg shadow-lg w-[400px] text-white"
+             @onclick:stopPropagation>
+            <header class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">@Title</h3>
+                <button class="text-zinc-400 hover:text-white" @onclick="Close">✖</button>
+            </header>
+
+            <div class="mb-4">
+                @ChildContent
+            </div>
+
+            @if (ShowFooter)
+            {
+                <footer class="flex justify-end gap-2">
+                    <button class="px-4 py-2 bg-zinc-700 rounded hover:bg-zinc-600 transition-colors cursor-pointer @CancelButtonClass" @onclick="Close">@CancelButtonText</button>
+                    <button class="px-4 py-2 bg-aero-500 rounded hover:bg-aero-600 transition-colors cursor-pointer text-zinc-800 @ConfirmButtonClass" @onclick="Confirm">@ConfirmButtonText</button>
+                </footer>
+            }
+        </div>
+    </div>
+}
