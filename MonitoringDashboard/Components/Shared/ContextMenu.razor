@@ -1,0 +1,14 @@
+﻿@inject IJSRuntime JS
+
+<div @attributes="AdditionalAttributes">
+    <div class="absolute -top-4 -left-4 bg-red-900 p-4 z-[3000]">
+        @foreach (var item in Items)
+        {
+            <div class="p-2 hover:bg-neutral-700 cursor-pointer"
+                 @onclick="() => { if (!item.Disabled && item.OnClick != null) item.OnClick(); }">
+                @item.Text
+            </div>
+        }
+    </div>
+    <div class="fixed inset-0 top-0 left-0 w-screen h-screen z-[2000]" @onclick="CloseMenu"></div>
+</div>

@@ -1,0 +1,33 @@
+﻿@inject IServiceScopeFactory ScopeFactory
+@inject NavigationManager Nav
+
+<EditForm FormName="create-edit" Model="NewMonitoredService" OnValidSubmit="() => EditMode ? UpdateService() : AddService()" class="flex flex-col gap-4">
+    <DataAnnotationsValidator/>
+    
+    <div class="flex gap-4">
+        <div class="flex flex-col w-full">
+            <label for="name">Name</label>
+            <span class="input flex items-center gap-2">
+                <InputText id="name" class="w-full h-full outline-0" @bind-Value="NewMonitoredService.Name" />
+                <span class="cursor-pointer shake" @onclick="SetNameAsRandomPhrase">🎲</span>
+            </span>
+            <ValidationMessage For="@(() => NewMonitoredService.Name)" />
+        </div>
+        <div class="flex flex-col w-full">
+            <label for="url">Url</label>
+            <InputText id="url" class="input" @bind-Value="NewMonitoredService.Url" />
+            <ValidationMessage For="@(() => NewMonitoredService.Url)" />
+        </div>
+    </div>
+    <div class="flex flex-col w-full">
+        <label for="checkIntervalSeconds">Check interval seconds</label>
+        <InputNumber id="checkIntervalSeconds" class="input" @bind-Value="NewMonitoredService.CheckIntervalSeconds" />
+        <ValidationMessage For="@(() => NewMonitoredService.CheckIntervalSeconds)" />
+    </div>
+    <div>
+        <label for="isActive">Is Active</label>
+        <InputCheckbox id="isActive" class="input" @bind-Value="NewMonitoredService.IsActive" />
+        <ValidationMessage For="@(() => NewMonitoredService.IsActive)" />
+    </div>
+    <button type="submit" class="input">Submit</button>
+</EditForm>

@@ -1,0 +1,12 @@
+﻿@page "/dashboard/services/edit/{ServiceId:guid}"
+@using MonitoringDashboard.Components.Shared
+@layout DashboardLayout
+@rendermode InteractiveServer
+
+<h3>Edit Monitored Service</h3>
+
+<MonitoredServiceForm ServiceId="ServiceId" EditMode="true"/>
+
+@code {
+    [Parameter] public Guid ServiceId { get; set; }
+}
