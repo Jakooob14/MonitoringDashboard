@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MonitoringDashboard.Data.Models;
 
 namespace MonitoringDashboard.Services;
 
@@ -18,7 +19,46 @@ public class CleanupWorker(
                 using var scope = scopeFactory.CreateScope();
                 await using var db = scope.ServiceProvider.GetRequiredService<Data.AppDbContext>();
 
-                var cutoffDate = DateTime.UtcNow.AddDays(-30);
+                // Aggregation
+                var yesterday = DateTime.UtcNow.Date.AddDays(-1);
+
+                logger.LogInformation("Starting daily rollup for {Date}", yesterday);
+
+                var alreadyRolled = await db.DailyServiceStats
+                    .AnyAsync(d => d.Date == yesterday, stoppingToken);
+                if (!alreadyRolled)
+                {
+                    var dailyStats = await db.ServiceChecks
+                        .Where(c => c.CheckedAt.Date == yesterday)
+                        .GroupBy(c => c.MonitoredServiceId)
+                        .Select(g => new DailyServiceStats
+                        {
+                            MonitoredServiceId = g.Key,
+                            Date = yesterday,
+                            TotalChecks = g.Count(),
+                            SuccessfulChecks = g.Count(x => x.IsSuccessful),
+                            FailedChecks = g.Count(x => !x.IsSuccessful)
+                        })
+                        .ToListAsync(stoppingToken);
+
+                    if (dailyStats.Count > 0)
+                    {
+                        db.DailyServiceStats.AddRange(dailyStats);
+                        await db.SaveChangesAsync(stoppingToken);
+                        logger.LogInformation("Inserted {Count} daily rollup records for {Date}.", dailyStats.Count, yesterday);
+                    }
+                    else
+                    {
+                        logger.LogInformation("No data found for {Date}, skipping rollup.", yesterday);
+                    }
+                }
+                else
+                {
+                    logger.LogInformation("Rollup for {Date} already exists, skipping.", yesterday);
+                }
+
+                // Cleanup
+                var cutoffDate = DateTime.UtcNow.AddDays(-3);
                 logger.LogInformation("Starting cleanup for entries before {Cutoff}", cutoffDate);
 
                 const int batchSize = 5000;
@@ -32,7 +72,8 @@ public class CleanupWorker(
                         .Take(batchSize)
                         .ToListAsync(stoppingToken);
 
-                    if (oldChecks.Count == 0) break;
+                    if (oldChecks.Count == 0)
+                        break;
 
                     db.ServiceChecks.RemoveRange(oldChecks);
                     await db.SaveChangesAsync(stoppingToken);
@@ -45,7 +86,7 @@ public class CleanupWorker(
             }
             catch (Exception e)
             {
-                logger.LogError(e, "Error occurred while cleaning up old data.");
+                logger.LogError(e, "Error occurred during cleanup/rollup.");
             }
 
             await Task.Delay(TimeSpan.FromHours(24), stoppingToken);

@@ -7,4 +7,5 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 {
     public DbSet<MonitoredService> MonitoredServices => Set<MonitoredService>();
     public DbSet<ServiceCheck> ServiceChecks => Set<ServiceCheck>();
+    public DbSet<DailyServiceStats> DailyServiceStats => Set<DailyServiceStats>();
 }
