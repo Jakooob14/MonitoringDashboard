@@ -1,7 +1,7 @@
 ﻿@inject IServiceScopeFactory ScopeFactory
 @inject NavigationManager Nav
 
-<EditForm FormName="create-edit" Model="NewMonitoredService" OnValidSubmit="() => EditMode ? UpdateService() : AddService()" class="flex flex-col gap-4">
+<EditForm FormName="monitoredServiceForm" Model="NewMonitoredService" OnValidSubmit="() => EditMode ? UpdateService() : AddService()" class="flex flex-col gap-4">
     <DataAnnotationsValidator/>
     
     <div class="flex gap-4">

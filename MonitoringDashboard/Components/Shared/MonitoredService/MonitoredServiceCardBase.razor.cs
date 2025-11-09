@@ -4,11 +4,11 @@ using MonitoringDashboard.Components.Shared.Enums;
 using MonitoringDashboard.Data;
 using MonitoringDashboard.Data.Models;
 
-namespace MonitoringDashboard.Components.Shared;
+namespace MonitoringDashboard.Components.Shared.MonitoredService;
 
 public partial class MonitoredServiceCardBase : ComponentBase
 {
-    [Parameter] public required MonitoredService MonitoredService { get; set; }
+    [Parameter] public required Data.Models.MonitoredService MonitoredService { get; set; }
     [Inject] public IServiceScopeFactory ScopeFactory { get; set; } = null!;
 
     [Parameter] public TimeUnit DisplayUnit { get; set; } = TimeUnit.Days;

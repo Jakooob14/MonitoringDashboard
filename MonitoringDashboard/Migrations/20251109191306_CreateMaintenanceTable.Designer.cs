@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MonitoringDashboard.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MonitoringDashboard.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251109191306_CreateMaintenanceTable")]
+    partial class CreateMaintenanceTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,6 +68,9 @@ namespace MonitoringDashboard.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("boolean");
 
+                    b.Property<Guid?>("MonitoredServiceId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("timestamp with time zone");
 
@@ -74,6 +80,8 @@ namespace MonitoringDashboard.Migrations
                         .HasColumnType("character varying(128)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MonitoredServiceId");
 
                     b.ToTable("Maintenances");
                 });
@@ -96,9 +104,6 @@ namespace MonitoringDashboard.Migrations
                     b.Property<DateTime>("LastDowntimeAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("MaintenanceId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -110,8 +115,6 @@ namespace MonitoringDashboard.Migrations
                         .HasColumnType("character varying(1024)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MaintenanceId");
 
                     b.ToTable("MonitoredServices");
                 });
@@ -148,11 +151,13 @@ namespace MonitoringDashboard.Migrations
                     b.ToTable("ServiceChecks");
                 });
 
-            modelBuilder.Entity("MonitoringDashboard.Data.Models.MonitoredService", b =>
+            modelBuilder.Entity("MonitoringDashboard.Data.Models.Maintenance", b =>
                 {
-                    b.HasOne("MonitoringDashboard.Data.Models.Maintenance", null)
-                        .WithMany("MonitoredServices")
-                        .HasForeignKey("MaintenanceId");
+                    b.HasOne("MonitoringDashboard.Data.Models.MonitoredService", "MonitoredService")
+                        .WithMany()
+                        .HasForeignKey("MonitoredServiceId");
+
+                    b.Navigation("MonitoredService");
                 });
 
             modelBuilder.Entity("MonitoringDashboard.Data.Models.ServiceCheck", b =>
@@ -164,11 +169,6 @@ namespace MonitoringDashboard.Migrations
                         .IsRequired();
 
                     b.Navigation("MonitoredService");
-                });
-
-            modelBuilder.Entity("MonitoringDashboard.Data.Models.Maintenance", b =>
-                {
-                    b.Navigation("MonitoredServices");
                 });
 
             modelBuilder.Entity("MonitoringDashboard.Data.Models.MonitoredService", b =>

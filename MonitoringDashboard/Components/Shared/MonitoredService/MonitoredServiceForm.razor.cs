@@ -2,7 +2,7 @@
 using MonitoringDashboard.Data;
 using MonitoringDashboard.Helpers;
 
-namespace MonitoringDashboard.Components.Shared;
+namespace MonitoringDashboard.Components.Shared.MonitoredService;
 
 public partial class MonitoredServiceForm : ComponentBase
 {

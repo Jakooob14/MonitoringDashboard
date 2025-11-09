@@ -1,0 +1,41 @@
+﻿@inherits MonitoringDashboard.Components.Shared.Maintenance.MaintenanceCardBase
+
+<div class="bg-zinc-800 rounded-2xl p-6 transition-all shadow-lg border border-zinc-700">
+    <div class="flex justify-between items-center">
+        <h3 class="text-xl font-semibold">@Maintenance.Title</h3>
+        <span class="text-sm text-zinc-400">@StatusText</span>
+    </div>
+
+    <p class="mt-2 text-zinc-300 line-clamp-2">@Maintenance.Description</p>
+
+    <div class="mt-4 flex justify-between items-center text-sm text-zinc-400">
+        <div>
+            <strong>Start:</strong> @Maintenance.StartTime.ToLocalTime().ToString("g") <br />
+            <strong>End:</strong> @Maintenance.EndTime.ToLocalTime().ToString("g")
+        </div>
+        <div class="text-right">
+            <strong>Duration:</strong> @DurationString <br />
+            <strong>Services: </strong>
+            @if (Maintenance.MonitoredServices.Count > 0)
+            {
+                @string.Join(", ", Maintenance.MonitoredServices.Select(s => s.Name))
+            }
+            else
+            {
+                <span>None</span>
+            }
+        </div>
+    </div>
+
+    <div class="mt-4 flex gap-2">
+        <NavLink class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded" 
+                 Href="@($"/dashboard/maintenance/edit/{Maintenance.Id}")">
+            Edit
+        </NavLink>
+
+        <button class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded cursor-pointer"
+                @onclick="DeleteMaintenance">
+            Delete
+        </button>
+    </div>
+</div>

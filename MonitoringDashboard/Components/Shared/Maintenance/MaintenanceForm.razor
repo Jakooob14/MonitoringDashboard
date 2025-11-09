@@ -1,0 +1,60 @@
+﻿@using MonitoringDashboard.Data.Models
+@namespace MonitoringDashboard.Components.Shared.Maintenance
+
+<EditForm FormName="maintenanceForm"
+          Model="NewMaintenance"
+          OnValidSubmit="@(EditMode ? UpdateMaintenance : AddMaintenance)"
+          class="flex flex-col gap-4">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+    <div>
+        <label>Title</label>
+        <InputText class="input w-full" @bind-Value="NewMaintenance.Title"/>
+    </div>
+
+    <div>
+        <label>Description</label>
+        <InputTextArea class="input w-full" @bind-Value="NewMaintenance.Description"/>
+    </div>
+
+    <div>
+        <label>Start</label>
+        <InputText type="datetime-local"
+                   class="input w-full"
+                   step="60"
+                   @bind-Value="StartLocalString" />
+    </div>
+
+    <div>
+        <label>End</label>
+        <InputText type="datetime-local"
+                   class="input w-full"
+                   step="60"
+                   @bind-Value="EndLocalString" />
+    </div>
+
+    <div class="flex items-center gap-2">
+        <InputCheckbox @bind-Value="NewMaintenance.IsCompleted"/>
+        <label>Is Completed</label>
+    </div>
+
+    <div>
+        <label>Affected Services</label>
+        <div class="flex flex-col gap-1">
+            @foreach (var service in AllMonitoredServices)
+            {
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox"
+                           checked="@SelectedServiceIds.Contains(service.Id)"
+                           @onchange="() => ToggleService(service.Id)"/>
+                    @service.Name
+                </label>
+            }
+        </div>
+    </div>
+
+    <button type="submit" class="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-500 transition">
+        @(EditMode ? "Save Changes" : "Add Maintenance")
+    </button>
+</EditForm>

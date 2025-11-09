@@ -1,0 +1,12 @@
+﻿@page "/dashboard/maintenance/edit/{Id:guid}"
+@using MonitoringDashboard.Components.Shared.Maintenance
+@layout DashboardLayout
+@rendermode InteractiveServer
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+}
+
+<h2 class="text-2xl font-bold mb-4">Edit Maintenance</h2>
+
+<MaintenanceForm EditMode="true" MaintenanceId="@Id" />
