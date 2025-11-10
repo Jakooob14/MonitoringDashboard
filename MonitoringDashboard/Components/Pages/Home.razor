@@ -18,7 +18,7 @@
             <RefreshTimer OnRefresh="StateHasChanged"/>
         </div>
     </section>
-    <section class="bg-zinc-800 p-6 rounded-sm mt-4 text-2xl font-bold flex justify-center border-1 border-zinc-700">
+    <section class="bg-zinc-800 p-6 rounded-sm shadow-lg mt-4 text-2xl font-bold flex justify-center border-1 border-zinc-700">
         @if (_failedServicesCount > 0)
         {
             <span>@_failedServicesCount service@(_failedServicesCount > 1 ? "s are" : " is") currently down</span>
@@ -42,7 +42,6 @@
     }
     <section class="mt-8">
         <h2 class="text-4xl">Services</h2>
-        <NavLink href="/add-monitored-service">Add monitored service</NavLink>
         <div class="flex flex-col gap-y-4 mt-4">
             @foreach (var monitoredService in _monitoredServices)
             {

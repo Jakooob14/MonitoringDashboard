@@ -1,4 +1,4 @@
-﻿<span @attributes="AdditionalAttributes" style="@($"width:{Size}px;height:{Size}px;")">@((MarkupString)File.ReadAllText($"wwwroot/{Path}"))</span>
+﻿<span @attributes="AdditionalAttributes" style="@($"width:{Size}px;height:{Size}px; display:block;")">@((MarkupString)File.ReadAllText($"wwwroot/{Path}"))</span>
 
 @code{
     

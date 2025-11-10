@@ -72,7 +72,8 @@ public partial class Home
         
         _maintenances = await db.Maintenances
             .Where(m => m.Status == MaintenanceStatus.Scheduled || m.Status == MaintenanceStatus.InProgress)
-            .OrderByDescending(m => m.Severity)
+            .OrderByDescending(m => m.Status)
+            .ThenByDescending(m => m.Severity)
             .ToListAsync();
     }
 }

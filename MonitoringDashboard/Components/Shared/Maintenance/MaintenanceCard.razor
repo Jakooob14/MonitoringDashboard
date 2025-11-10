@@ -1,66 +1,56 @@
 ﻿@using MonitoringDashboard.Data.Models
 @using MonitoringDashboard.Helpers
 
-<div class="relative w-full bg-neutral-800 p-4 flex flex-col gap-y-4 rounded-sm shadow-lg border-s-4 border-1 border-zinc-700">
-    <!-- Header: Title + Status -->
-    <div class="flex flex-wrap items-center gap-3 justify-between">
-        <div class="flex items-center gap-3">
-            <span class="text-2xl font-semibold">@Maintenance.Title</span>
-
-            @if (Maintenance.Status == MaintenanceStatus.InProgress)
+<div class="relative w-full bg-neutral-800 p-6 rounded border border-zinc-700/60 shadow-lg">
+    <!-- Header -->
+    <div class="flex justify-between items-start flex-wrap gap-y-2">
+        <div>
+            <div class="flex items-center gap-3 flex-wrap">
+                <h2 class="text-xl font-semibold text-white">@Maintenance.Title</h2>
+                <span class=@($"px-2 py-0.5 rounded text-sm font-semibold border {GetStatusBadgeClass(Maintenance.Status)}")>
+                    @Maintenance.Status.ToPascalCaseString()
+                </span>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Maintenance.Description))
             {
-                <span class="px-2 py-1 bg-yellow-500 text-yellow-100 rounded-sm text-sm font-semibold">Ongoing</span>
-            }
-            else if (Maintenance.Status == MaintenanceStatus.Scheduled)
-            {
-                <span class="px-2 py-1 bg-blue-600 text-blue-100 rounded-sm text-sm font-semibold">Scheduled</span>
+                <p class="text-zinc-400 mt-1 max-w-prose">@Maintenance.Description</p>
             }
         </div>
 
-        <!-- Severity -->
-        <span class="px-2 py-1 rounded-sm text-sm font-semibold"
-              style="@($"background-color:{GetSeverityColor(Maintenance.Severity)};color:white;")">
-            @Maintenance.Severity
+        <span class=@($"flex items-center gap-1 px-2 py-1 rounded border font-medium {GetSeverityClass(Maintenance.Severity)}")>
+            <Icon Path="icons/triangle-exclamation.svg" class="w-4 h-4" />
+            @Maintenance.Severity.ToPascalCaseString()
         </span>
     </div>
 
-    <!-- Description -->
-    @if (!string.IsNullOrWhiteSpace(Maintenance.Description))
-    {
-        <div class="text-zinc-300 whitespace-pre-line">
-            @Maintenance.Description
-        </div>
-    }
+    <hr class="my-3 border-zinc-700/40" />
 
     <!-- Times -->
-    <div class="flex flex-col gap-1 text-sm text-zinc-400">
-        <span>
-            <strong>Start:</strong> @Maintenance.StartTime.ToLocalTime().ToString("f")
-        </span>
-        <span>
-            <strong>End:</strong> @Maintenance.EndTime.ToLocalTime().ToString("f")
-        </span>
-        <span>
-            <strong>Duration:</strong> @((Maintenance.EndTime - Maintenance.StartTime).ToReadableString())
-        </span>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-zinc-400">
+        <div><strong>Start:</strong> @Maintenance.StartTime.ToLocalTime()</div>
+        <div><strong>End:</strong> @Maintenance.EndTime.ToLocalTime()</div>
+        <div><strong>Duration:</strong> @((Maintenance.EndTime - Maintenance.StartTime).ToReadableString())</div>
     </div>
 
-    <!-- Related Services -->
-    @if (Maintenance.MonitoredServices?.Any() == true)
+    @if (Maintenance.MonitoredServices.Any())
     {
-        <div class="flex flex-wrap items-center gap-2 text-sm text-zinc-300">
-            <strong>Affected Services:</strong>
-            @foreach (var service in Maintenance.MonitoredServices)
-            {
-                <span class="px-2 py-1 bg-zinc-700 rounded-sm">@service.Name</span>
-            }
+        <div class="mt-3 flex flex-col gap-2">
+            <strong class="text-zinc-300">Affected Services</strong>
+            <div class="flex flex-wrap items-center gap-2 text-sm">
+                @foreach (var service in Maintenance.MonitoredServices)
+                {
+                    <span class="px-2 py-1 bg-zinc-700/60 text-zinc-100 rounded text-xs font-medium">
+                        @service.Name
+                    </span>
+                }
+            </div>
         </div>
     }
 </div>
 
 @code {
     [Parameter]
-    public Maintenance Maintenance { get; set; } = default!;
+    public Maintenance Maintenance { get; set; } = null!;
 
     private string GetSeverityColor(MaintenanceSeverity severity) => severity switch
     {
@@ -68,5 +58,20 @@
         MaintenanceSeverity.Major => "#eab308",
         MaintenanceSeverity.Critical => "#dc2626",
         _ => "#6b7280"
+    };
+    
+    private string GetStatusBadgeClass(MaintenanceStatus status) => status switch
+    {
+        MaintenanceStatus.InProgress => "bg-red-600/20 text-red-400 border-red-500/40",
+        MaintenanceStatus.Scheduled => "bg-blue-600/20 text-blue-400 border-blue-500/40",
+        _ => "bg-zinc-700 text-zinc-300"
+    };
+
+    private string GetSeverityClass(MaintenanceSeverity severity) => severity switch
+    {
+        MaintenanceSeverity.Minor => "text-green-400 border-green-600/40 bg-green-600/10",
+        MaintenanceSeverity.Major => "text-yellow-400 border-yellow-600/40 bg-yellow-600/10",
+        MaintenanceSeverity.Critical => "text-red-400 border-red-600/40 bg-red-600/10",
+        _ => "text-zinc-400 border-zinc-600/40 bg-zinc-700/10"
     };
 }
