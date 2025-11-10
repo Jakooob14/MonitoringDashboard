@@ -1,12 +1,34 @@
-﻿@page "/dashboard/services/edit/{ServiceId:guid}"
+﻿@page "/dashboard/services/edit/{Id:guid}"
+@using Microsoft.EntityFrameworkCore
 @using MonitoringDashboard.Components.Shared.MonitoredService
 @layout DashboardLayout
+@inject IServiceScopeFactory ScopeFactory
+@inject NavigationManager Nav
 @rendermode InteractiveServer
 
 <h3>Edit Monitored Service</h3>
 
-<MonitoredServiceForm ServiceId="ServiceId" EditMode="true"/>
+<MonitoredServiceForm EditMonitoredService="@MonitoredService" EditMode="true"/>
 
 @code {
-    [Parameter] public Guid ServiceId { get; set; }
+    [Parameter] public Guid Id { get; set; }
+    private Data.Models.MonitoredService? MonitoredService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var scope = ScopeFactory.CreateScope();
+        await using var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        var maintenance = await db.MonitoredServices
+            .FirstOrDefaultAsync(m => m.Id == Id);
+        
+        if (maintenance == null)
+        {
+            Nav.NavigateTo("/404");
+            return;
+        }
+        
+        MonitoredService = maintenance;
+    }
+
 }

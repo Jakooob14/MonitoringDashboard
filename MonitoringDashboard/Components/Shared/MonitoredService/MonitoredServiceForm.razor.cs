@@ -8,7 +8,7 @@ public partial class MonitoredServiceForm : ComponentBase
 {
     [SupplyParameterFromForm] private Data.Models.MonitoredService NewMonitoredService { get; set; } = new();
     [Parameter] public bool EditMode { get; set; }
-    [Parameter] public Guid ServiceId { get; set; }
+    [Parameter] public Data.Models.MonitoredService? EditMonitoredService { get; set; }
     
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -17,13 +17,9 @@ public partial class MonitoredServiceForm : ComponentBase
         {
             if (EditMode)
             {
-                using var scope = ScopeFactory.CreateScope();
-                await using var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-                var existingService = await db.MonitoredServices.FindAsync(ServiceId);
-                if (existingService == null) return;
+                if (EditMonitoredService == null) return;
                 
-                NewMonitoredService = existingService;
+                NewMonitoredService = EditMonitoredService;
                 StateHasChanged();
             }
             else
