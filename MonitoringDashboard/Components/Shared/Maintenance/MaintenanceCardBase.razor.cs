@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.EntityFrameworkCore;
 using MonitoringDashboard.Data;
-using MonitoringDashboard.Data.Models;
 
 namespace MonitoringDashboard.Components.Shared.Maintenance;
 
@@ -11,16 +9,7 @@ public partial class MaintenanceCardBase : ComponentBase
     [Inject] public IServiceScopeFactory ScopeFactory { get; set; } = null!;
     [Inject] public NavigationManager Nav { get; set; } = null!;
 
-    protected string StatusText = string.Empty;
-    protected string DurationString = string.Empty;
-
-    protected override void OnParametersSet()
-    {
-        StatusText = Maintenance.IsCompleted ? "✅ Completed" : "🕒 Ongoing";
-        DurationString = GetDurationString(Maintenance.StartTime, Maintenance.EndTime);
-    }
-
-    private string GetDurationString(DateTime start, DateTime end)
+    protected string GetDurationString(DateTime start, DateTime end)
     {
         TimeSpan duration = end - start;
         List<string> parts = new();

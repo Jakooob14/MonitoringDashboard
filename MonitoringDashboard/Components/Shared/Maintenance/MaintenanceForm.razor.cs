@@ -73,12 +73,13 @@ public partial class MaintenanceForm : ComponentBase
 
         if (existing is null) return;
 
-        existing.Title       = NewMaintenance.Title;
+        existing.Title = NewMaintenance.Title;
         existing.Description = NewMaintenance.Description;
-        existing.IsCompleted = NewMaintenance.IsCompleted;
+        existing.Severity = NewMaintenance.Severity;
+        existing.Status = NewMaintenance.Status;
 
-        existing.StartTime   = ToUtc(NewMaintenance.StartTime);
-        existing.EndTime     = ToUtc(NewMaintenance.EndTime);
+        existing.StartTime = ToUtc(NewMaintenance.StartTime);
+        existing.EndTime = ToUtc(NewMaintenance.EndTime);
 
         var selectedServices = await db.MonitoredServices
             .Where(s => SelectedServiceIds.Contains(s.Id))

@@ -1,41 +1,72 @@
-﻿@inherits MonitoringDashboard.Components.Shared.Maintenance.MaintenanceCardBase
+﻿@using MonitoringDashboard.Data.Models
+@using MonitoringDashboard.Helpers
 
-<div class="bg-zinc-800 rounded-2xl p-6 transition-all shadow-lg border border-zinc-700">
-    <div class="flex justify-between items-center">
-        <h3 class="text-xl font-semibold">@Maintenance.Title</h3>
-        <span class="text-sm text-zinc-400">@StatusText</span>
-    </div>
+<div class="relative w-full bg-neutral-800 p-4 flex flex-col gap-y-4 rounded-sm shadow-lg border-s-4 border-1 border-zinc-700">
+    <!-- Header: Title + Status -->
+    <div class="flex flex-wrap items-center gap-3 justify-between">
+        <div class="flex items-center gap-3">
+            <span class="text-2xl font-semibold">@Maintenance.Title</span>
 
-    <p class="mt-2 text-zinc-300 line-clamp-2">@Maintenance.Description</p>
-
-    <div class="mt-4 flex justify-between items-center text-sm text-zinc-400">
-        <div>
-            <strong>Start:</strong> @Maintenance.StartTime.ToLocalTime().ToString("g") <br />
-            <strong>End:</strong> @Maintenance.EndTime.ToLocalTime().ToString("g")
-        </div>
-        <div class="text-right">
-            <strong>Duration:</strong> @DurationString <br />
-            <strong>Services: </strong>
-            @if (Maintenance.MonitoredServices.Count > 0)
+            @if (Maintenance.Status == MaintenanceStatus.InProgress)
             {
-                @string.Join(", ", Maintenance.MonitoredServices.Select(s => s.Name))
+                <span class="px-2 py-1 bg-yellow-500 text-yellow-100 rounded-sm text-sm font-semibold">Ongoing</span>
             }
-            else
+            else if (Maintenance.Status == MaintenanceStatus.Scheduled)
             {
-                <span>None</span>
+                <span class="px-2 py-1 bg-blue-600 text-blue-100 rounded-sm text-sm font-semibold">Scheduled</span>
             }
         </div>
+
+        <!-- Severity -->
+        <span class="px-2 py-1 rounded-sm text-sm font-semibold"
+              style="@($"background-color:{GetSeverityColor(Maintenance.Severity)};color:white;")">
+            @Maintenance.Severity
+        </span>
     </div>
 
-    <div class="mt-4 flex gap-2">
-        <NavLink class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded" 
-                 Href="@($"/dashboard/maintenance/edit/{Maintenance.Id}")">
-            Edit
-        </NavLink>
+    <!-- Description -->
+    @if (!string.IsNullOrWhiteSpace(Maintenance.Description))
+    {
+        <div class="text-zinc-300 whitespace-pre-line">
+            @Maintenance.Description
+        </div>
+    }
 
-        <button class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded cursor-pointer"
-                @onclick="DeleteMaintenance">
-            Delete
-        </button>
+    <!-- Times -->
+    <div class="flex flex-col gap-1 text-sm text-zinc-400">
+        <span>
+            <strong>Start:</strong> @Maintenance.StartTime.ToLocalTime().ToString("f")
+        </span>
+        <span>
+            <strong>End:</strong> @Maintenance.EndTime.ToLocalTime().ToString("f")
+        </span>
+        <span>
+            <strong>Duration:</strong> @((Maintenance.EndTime - Maintenance.StartTime).ToReadableString())
+        </span>
     </div>
+
+    <!-- Related Services -->
+    @if (Maintenance.MonitoredServices?.Any() == true)
+    {
+        <div class="flex flex-wrap items-center gap-2 text-sm text-zinc-300">
+            <strong>Affected Services:</strong>
+            @foreach (var service in Maintenance.MonitoredServices)
+            {
+                <span class="px-2 py-1 bg-zinc-700 rounded-sm">@service.Name</span>
+            }
+        </div>
+    }
 </div>
+
+@code {
+    [Parameter]
+    public Maintenance Maintenance { get; set; } = default!;
+
+    private string GetSeverityColor(MaintenanceSeverity severity) => severity switch
+    {
+        MaintenanceSeverity.Minor => "#22c55e",
+        MaintenanceSeverity.Major => "#eab308",
+        MaintenanceSeverity.Critical => "#dc2626",
+        _ => "#6b7280"
+    };
+}

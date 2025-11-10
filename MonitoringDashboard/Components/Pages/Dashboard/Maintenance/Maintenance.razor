@@ -1,8 +1,6 @@
 ﻿@page "/dashboard/maintenance"
-@using MonitoringDashboard.Components.Shared.Maintenance
 @layout DashboardLayout
 @inject IServiceScopeFactory ScopeFactory
-@inject NavigationManager Nav
 
 
 <div class="flex justify-between items-end mb-6">
@@ -21,7 +19,7 @@
     {
         @foreach (var maintenance in _maintenances)
         {
-            <MaintenanceCard Maintenance="maintenance" />
+            <MaintenanceDashboardCard Maintenance="maintenance" />
         }
     }
 </div>

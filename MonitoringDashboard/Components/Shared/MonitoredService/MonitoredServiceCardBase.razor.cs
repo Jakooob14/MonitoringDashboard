@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MonitoringDashboard.Components.Shared.Enums;
 using MonitoringDashboard.Data;
 using MonitoringDashboard.Data.Models;
+using MonitoringDashboard.Helpers;
 
 namespace MonitoringDashboard.Components.Shared.MonitoredService;
 
@@ -146,10 +147,8 @@ public partial class MonitoredServiceCardBase : ComponentBase
             if (lastFailedRaw != null)
             {
                 var timeSpan = DateTime.UtcNow - lastFailedRaw.CheckedAt;
-
-                if (timeSpan.TotalDays >= 1) return $"Last incident {(int)timeSpan.TotalDays} day{(timeSpan.TotalDays >= 2 ? "s" : "")} ago";
-                if (timeSpan.TotalHours >= 1) return $"Last incident {(int)timeSpan.TotalHours} hour{(timeSpan.TotalHours >= 2 ? "s" : "")} ago";
-                if (timeSpan.TotalMinutes >= 1) return $"Last incident {(int)timeSpan.TotalMinutes} minute{(timeSpan.TotalMinutes >= 2 ? "s" : "")} ago";
+                
+                if (timeSpan.TotalMinutes >= 1) return $"Last incident {timeSpan.ToReadableString()} ago";
 
                 return "Last incident just now";
             }
@@ -180,9 +179,7 @@ public partial class MonitoredServiceCardBase : ComponentBase
         if (lastFailedCheck == null) return "No incidents recently";
 
         var ts = DateTime.UtcNow - lastFailedCheck.CheckedAt;
-        if (ts.TotalDays >= 1) return $"Last incident {(int)ts.TotalDays} day{(ts.TotalDays >= 2 ? "s" : "")} ago";
-        if (ts.TotalHours >= 1) return $"Last incident {(int)ts.TotalHours} hour{(ts.TotalHours >= 2 ? "s" : "")} ago";
-        if (ts.TotalMinutes >= 1) return $"Last incident {(int)ts.TotalMinutes} minute{(ts.TotalMinutes >= 2 ? "s" : "")} ago";
+        if (ts.TotalMinutes >= 1) return $"Last incident {ts.ToReadableString()} ago";
 
         return "Last incident just now";
     }

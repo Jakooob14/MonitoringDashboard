@@ -1,4 +1,5 @@
 ﻿@using MonitoringDashboard.Data.Models
+@using MonitoringDashboard.Helpers
 @namespace MonitoringDashboard.Components.Shared.Maintenance
 
 <EditForm FormName="maintenanceForm"
@@ -33,10 +34,25 @@
                    step="60"
                    @bind-Value="EndLocalString" />
     </div>
-
-    <div class="flex items-center gap-2">
-        <InputCheckbox @bind-Value="NewMaintenance.IsCompleted"/>
-        <label>Is Completed</label>
+    
+    <div>
+        <label>Severity</label>
+        <InputSelect class="input w-full" @bind-Value="NewMaintenance.Severity">
+            @foreach (var severity in Enum.GetValues<MaintenanceSeverity>())
+            {
+                <option value="@severity">@severity.ToString()</option>
+            }
+        </InputSelect>
+    </div>
+    
+    <div>
+        <label>Status</label>
+        <InputSelect class="input w-full" @bind-Value="NewMaintenance.Status">
+            @foreach (var status in Enum.GetValues<MaintenanceStatus>())
+            {
+                <option value="@status">@status.ToPascalCaseString()</option>
+            }
+        </InputSelect>
     </div>
 
     <div>

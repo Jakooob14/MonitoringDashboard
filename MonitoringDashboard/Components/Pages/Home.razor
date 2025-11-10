@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using MonitoringDashboard.Components.Shared
+@using MonitoringDashboard.Components.Shared.Maintenance
 @using MonitoringDashboard.Components.Shared.MonitoredService
 @using MonitoringDashboard.Services
 @inject ServiceChecker ServiceChecker
@@ -27,7 +28,18 @@
             <span>All services are operational</span>
         }
     </section>
-
+    @if (_maintenances.Count > 0)
+    {
+        <section class="mt-8">
+            <h2 class="text-4xl">Maintenance</h2>
+            <div class="flex flex-col gap-y-4 mt-4">
+                @foreach (var maintenance in _maintenances)
+                {
+                    <MaintenanceCard Maintenance="maintenance"/>
+                }
+            </div>
+        </section>
+    }
     <section class="mt-8">
         <h2 class="text-4xl">Services</h2>
         <NavLink href="/add-monitored-service">Add monitored service</NavLink>
