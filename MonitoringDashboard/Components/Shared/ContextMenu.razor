@@ -1,7 +1,7 @@
 ﻿@inject IJSRuntime JS
 
 <div @attributes="AdditionalAttributes">
-    <div class="absolute top-0 left-0 bg-zinc-800 shadow-uniform p-2 z-[3000] rounded-sm">
+    <div class="absolute top-0 left-0 bg-zinc-800 shadow-uniform p-2 z-[3000] rounded-sm border border-zinc-700 min-w-[200px]">
         @foreach (var item in Items)
         {
             <div class="p-2 hover:bg-neutral-700 cursor-pointer rounded-sm flex items-center gap-2 @(item.Disabled ? "opacity-50 cursor-not-allowed" : "")"
@@ -14,7 +14,7 @@
             </div>
             @if (item != Items.Last())
             {
-                <hr class="border-zinc-600 my-2" />
+                <hr class="border-zinc-700 my-2" />
             }
         }
     </div>

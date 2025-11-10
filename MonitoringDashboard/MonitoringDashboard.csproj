@@ -26,11 +26,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Components\Pages\Dashboard\Maintenance\AddMonitoredService.razor" />
-      <AdditionalFiles Include="Components\Pages\Dashboard\Maintenance\EditMonitoredService.razor" />
       <AdditionalFiles Include="Components\Pages\Dashboard\Maintenance\Maintenance.razor" />
       <AdditionalFiles Include="Components\Shared\Maintenance\MaintenanceCard.razor" />
-      <AdditionalFiles Include="Components\Shared\Maintenance\MonitoredServiceForm.razor" />
     </ItemGroup>
 
 </Project>

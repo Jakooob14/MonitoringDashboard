@@ -1,1 +1,9 @@
-﻿<span @attributes="AdditionalAttributes">@((MarkupString)File.ReadAllText($"wwwroot/{Path}"))</span>
+﻿<span @attributes="AdditionalAttributes" style="@($"width:{Size}px;height:{Size}px;")">@((MarkupString)File.ReadAllText($"wwwroot/{Path}"))</span>
+
+@code{
+    
+    [Parameter] public required string Path { get; set; } = string.Empty;
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? AdditionalAttributes { get; set; }
+    [Parameter] public int Size { get; set; } = 24;
+
+}

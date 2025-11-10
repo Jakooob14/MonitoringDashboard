@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MonitoringDashboard.Components.Shared;
 
-namespace MonitoringDashboard.Components.Pages.Dashboard;
+namespace MonitoringDashboard.Components.Pages.Dashboard.Services;
 
 public partial class MonitoredServiceDashboardCard
 {
