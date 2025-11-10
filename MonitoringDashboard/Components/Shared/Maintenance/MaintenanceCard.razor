@@ -23,7 +23,7 @@
         </span>
     </div>
 
-    <hr class="my-3 border-zinc-700/40" />
+    <hr class="my-3 border-zinc-700" />
 
     <!-- Times -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-zinc-400">
@@ -46,19 +46,15 @@
             </div>
         </div>
     }
+    
+    <div>
+        @ChildContent
+    </div>
 </div>
 
 @code {
-    [Parameter]
-    public Maintenance Maintenance { get; set; } = null!;
-
-    private string GetSeverityColor(MaintenanceSeverity severity) => severity switch
-    {
-        MaintenanceSeverity.Minor => "#22c55e",
-        MaintenanceSeverity.Major => "#eab308",
-        MaintenanceSeverity.Critical => "#dc2626",
-        _ => "#6b7280"
-    };
+    [Parameter, EditorRequired] public Maintenance Maintenance { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
     
     private string GetStatusBadgeClass(MaintenanceStatus status) => status switch
     {

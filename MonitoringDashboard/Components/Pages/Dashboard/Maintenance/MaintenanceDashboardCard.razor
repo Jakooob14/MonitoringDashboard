@@ -1,45 +1,91 @@
-﻿@using MonitoringDashboard.Helpers
+﻿@using MonitoringDashboard.Components.Shared
+@using MonitoringDashboard.Components.Shared.Maintenance
+@using MonitoringDashboard.Helpers
 @inherits MonitoringDashboard.Components.Shared.Maintenance.MaintenanceCardBase
 
-<div class="bg-zinc-800 rounded-sm p-6 transition-all shadow-lg border border-zinc-700">
-    <div class="flex justify-between items-center">
-        <h3 class="text-xl font-semibold">@Maintenance.Title</h3>
-        <div class="flex flex-col">
-            <span class="text-sm text-zinc-400">@Maintenance.Status.ToPascalCaseString()</span>
-            <span class="text-sm text-zinc-400">@Maintenance.Severity.ToPascalCaseString()</span>
-        </div>
-    </div>
+@* <div class="bg-zinc-800 rounded-sm p-6 transition-all shadow-lg border border-zinc-700"> *@
+@*     <div class="flex justify-between items-center"> *@
+@*         <h3 class="text-xl font-semibold">@Maintenance.Title</h3> *@
+@*         <div class="flex flex-col"> *@
+@*             <span class="text-sm text-zinc-400">@Maintenance.Status.ToPascalCaseString()</span> *@
+@*             <span class="text-sm text-zinc-400">@Maintenance.Severity.ToPascalCaseString()</span> *@
+@*         </div> *@
+@*     </div> *@
+@* *@
+@*     <p class="mt-2 text-zinc-300 line-clamp-2">@Maintenance.Description</p> *@
+@* *@
+@*     <div class="mt-4 flex justify-between items-center text-sm text-zinc-400"> *@
+@*         <div> *@
+@*             <strong>Start:</strong> @Maintenance.StartTime.ToLocalTime().ToString("g") <br /> *@
+@*             <strong>End:</strong> @Maintenance.EndTime.ToLocalTime().ToString("g") *@
+@*         </div> *@
+@*         <div class="text-right"> *@
+@*             <strong>Duration:</strong> @GetDurationString(Maintenance.StartTime, Maintenance.EndTime) <br /> *@
+@*             <strong>Services: </strong> *@
+@*             @if (Maintenance.MonitoredServices.Count > 0) *@
+@*             { *@
+@*                 @string.Join(", ", Maintenance.MonitoredServices.Select(s => s.Name)) *@
+@*             } *@
+@*             else *@
+@*             { *@
+@*                 <span>None</span> *@
+@*             } *@
+@*         </div> *@
+@*     </div> *@
+@* *@
+@*     <div class="mt-4 flex gap-2"> *@
+@*         <NavLink class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded"  *@
+@*                  Href="@($"/dashboard/maintenance/edit/{Maintenance.Id}")"> *@
+@*             Edit *@
+@*         </NavLink> *@
+@* *@
+@*         <button class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded cursor-pointer" *@
+@*                 @onclick="DeleteMaintenance"> *@
+@*             Delete *@
+@*         </button> *@
+@*     </div> *@
+@* </div> *@
 
-    <p class="mt-2 text-zinc-300 line-clamp-2">@Maintenance.Description</p>
-
-    <div class="mt-4 flex justify-between items-center text-sm text-zinc-400">
-        <div>
-            <strong>Start:</strong> @Maintenance.StartTime.ToLocalTime().ToString("g") <br />
-            <strong>End:</strong> @Maintenance.EndTime.ToLocalTime().ToString("g")
-        </div>
-        <div class="text-right">
-            <strong>Duration:</strong> @GetDurationString(Maintenance.StartTime, Maintenance.EndTime) <br />
-            <strong>Services: </strong>
-            @if (Maintenance.MonitoredServices.Count > 0)
-            {
-                @string.Join(", ", Maintenance.MonitoredServices.Select(s => s.Name))
-            }
-            else
-            {
-                <span>None</span>
-            }
-        </div>
-    </div>
-
-    <div class="mt-4 flex gap-2">
-        <NavLink class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded" 
-                 Href="@($"/dashboard/maintenance/edit/{Maintenance.Id}")">
+<MaintenanceCard Maintenance="Maintenance">
+    <hr class="border-zinc-700 my-4" />
+    
+    <div class="flex gap-2">
+        <NavLink class="button-primary flex items-center gap-2 text-sm font-medium" Href=@($"/dashboard/maintenance/edit/{Maintenance.Id}")>
+            <Icon Path="icons/pen.svg" />
             Edit
         </NavLink>
 
-        <button class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded cursor-pointer"
-                @onclick="DeleteMaintenance">
+        <button class="button-primary flex items-center gap-2 text-sm font-medium text-red-400 transition-colors"
+                @onclick="() => _deleteModalOpen = true">
+            <Icon Path="icons/trash-can.svg" />
             Delete
         </button>
     </div>
-</div>
+</MaintenanceCard>
+
+<Modal @bind-IsOpen="_deleteModalOpen" 
+       Title="Delete Service" 
+       OnConfirm="HandleDeleteConfirm" 
+       ConfirmButtonText="Delete"
+       ConfirmButtonClass="bg-red-500 hover:bg-red-600 !text-zinc-100">
+    <p>Are you sure you want to delete this service?</p>
+</Modal>
+
+@code {
+
+    [Parameter] public EventCallback OnDeleted { get; set; }
+    
+    private bool _deleteModalOpen;
+    
+    private async Task HandleDeleteConfirm()
+    {
+        using var scope = ScopeFactory.CreateScope();
+        await using var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        
+        db.Maintenances.Remove(Maintenance);
+        await db.SaveChangesAsync();
+
+        if (OnDeleted.HasDelegate) await OnDeleted.InvokeAsync();
+    }
+    
+}
