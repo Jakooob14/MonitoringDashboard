@@ -10,7 +10,7 @@ public partial class MaintenanceForm : ComponentBase
 {
     [SupplyParameterFromForm] private Data.Models.Maintenance NewMaintenance { get; set; } = new();
     [Parameter] public bool EditMode { get; set; }
-    [Parameter] public Guid MaintenanceId { get; set; }
+    [Parameter] public Data.Models.Maintenance? EditMaintenance { get; set; }
 
     [Inject] public IServiceScopeFactory ScopeFactory { get; set; } = null!;
     [Inject] public NavigationManager Nav { get; set; } = null!;
@@ -27,14 +27,10 @@ public partial class MaintenanceForm : ComponentBase
 
         if (EditMode)
         {
-            var existingMaintenance = await db.Maintenances
-                .Include(m => m.MonitoredServices)
-                .FirstOrDefaultAsync(m => m.Id == MaintenanceId);
-
-            if (existingMaintenance == null) return;
-
-            NewMaintenance = existingMaintenance;
-            SelectedServiceIds = existingMaintenance.MonitoredServices.Select(s => s.Id).ToList();
+            if (EditMaintenance == null) return;
+            
+            NewMaintenance = EditMaintenance;
+            SelectedServiceIds = EditMaintenance.MonitoredServices.Select(s => s.Id).ToList();
         }
         else
         {

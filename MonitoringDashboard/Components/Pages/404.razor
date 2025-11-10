@@ -1,0 +1,10 @@
+﻿@page "/{*route:nonfile}"
+
+<div class="flex flex-col items-center justify-center w-full h-full text-center p-4">
+    <h3 class="text-3xl">404</h3>
+    <p>The page you are looking for could not be found.</p>
+</div>
+
+@code {
+    [Parameter] public string? Route { get; set; }
+}
