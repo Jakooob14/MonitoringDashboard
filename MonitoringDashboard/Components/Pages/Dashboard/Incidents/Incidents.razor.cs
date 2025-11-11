@@ -20,6 +20,7 @@ public partial class Incidents
         await using var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
         _incidents = await db.Incidents
+            .Include(i => i.MonitoredService)
             .OrderByDescending(i => i.StartTime)
             .ToListAsync();
     }

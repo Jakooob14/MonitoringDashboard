@@ -1,7 +1,13 @@
 ﻿@using MonitoringDashboard.Data.Models
+@using MonitoringDashboard.Helpers
 
-<tr class="p-4 w-full block">
-    <td>asd</td>
+<tr class="border-t border-t-zinc-700">
+    <td class="p-4">@Incident.Status.ToPascalCaseString()</td>
+    <td class="p-4">@Incident.MonitoredService.Name</td>
+    <td class="p-4">@Incident.Cause</td>
+    <td class="p-4">@Incident.StartTime</td>
+    <td class="p-4">@Incident.EndTime</td>
+    <td class="p-4">@((Incident.EndTime - Incident.StartTime)?.ToReadableString() ?? (DateTime.UtcNow - Incident.StartTime).ToReadableString())</td>
 </tr>
 
 @code {

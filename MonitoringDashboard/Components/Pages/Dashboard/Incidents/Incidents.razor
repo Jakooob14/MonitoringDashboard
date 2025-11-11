@@ -5,7 +5,7 @@
 
 
 <div class="flex justify-between items-end mb-6">
-    <h2 class="text-2xl">Incidents</h2>
+    <h2 class="text-5xl">Incidents</h2>
 </div>
 
 <div class="grid gap-4">
@@ -15,17 +15,21 @@
     }
     else
     {
-        <div class="bg-neutral-800 !rounded shadow-lg border-1 border-zinc-700">
+        <div class="bg-neutral-800 rounded! shadow-lg border border-zinc-700">
             <table class="w-full">
                 <thead>
-                <tr>
-                    <th>nigga</th>
+                <tr class="bg-neutral-900">
+                    <th class="py-4 ps-4 text-start">Status</th>
+                    <th class="py-4 ps-4 text-start">Monitor</th>
+                    <th class="py-4 ps-4 text-start">Cause</th>
+                    <th class="py-4 ps-4 text-start">Started</th>
+                    <th class="py-4 ps-4 text-start">Ended</th>
+                    <th class="py-4 ps-4 text-start">Duration</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach (var incident in _incidents)
                 {
-                    <hr class="border-zinc-700 w-full" />
                     <IncidentCard Incident="incident"/>
                 }
                 </tbody>
