@@ -20,7 +20,7 @@ public class MonitoringWorker(
                 using var scope = scopeFactory.CreateScope();
                 await using var db = scope.ServiceProvider.GetRequiredService<Data.AppDbContext>();
 
-                // === 1. Service checks ===
+                // === Service checks ===
                 var services = await db.MonitoredServices.AsNoTracking().ToListAsync(stoppingToken);
 
                 foreach (var service in services)
@@ -47,38 +47,62 @@ public class MonitoringWorker(
                     }
                 }
 
-                // === 2. Maintenance status updates ===
+                // === Maintenance status updates ===
                 var now = DateTime.UtcNow;
                 var maintenances = await db.Maintenances.ToListAsync(stoppingToken);
 
-                foreach (var m in maintenances)
+                foreach (var service in services)
                 {
-                    // Active window to In Progress
-                    if (m.StartTime <= now && now < m.EndTime && m.Status != MaintenanceStatus.Completed)
+                    var lastCheck = await db.ServiceChecks
+                        .Where(c => c.MonitoredServiceId == service.Id)
+                        .OrderByDescending(c => c.CheckedAt)
+                        .FirstOrDefaultAsync(stoppingToken);
+
+                    if (lastCheck != null &&
+                        (DateTime.UtcNow - lastCheck.CheckedAt).TotalSeconds < service.CheckIntervalSeconds)
+                        continue;
+
+                    var check = await serviceChecker.CheckAsync(service);
+                    check.MonitoredServiceId = service.Id;
+                    db.ServiceChecks.Add(check);
+
+                    // --- Incident logic ---
+                    var activeIncident = await db.Set<Incident>()
+                        .Where(i => i.MonitoredServiceId == service.Id && i.Status == IncidentStatus.Active)
+                        .FirstOrDefaultAsync(stoppingToken);
+
+                    if (!check.IsSuccessful)
                     {
-                        if (m.Status != MaintenanceStatus.InProgress)
+                        service.LastDowntimeAt = DateTime.UtcNow;
+                        db.MonitoredServices.Update(service);
+
+                        if (activeIncident == null)
                         {
-                            m.Status = MaintenanceStatus.InProgress;
-                            logger.LogInformation("Maintenance '{Title}' is now IN PROGRESS", m.Title);
-                            db.Maintenances.Update(m);
+                            // Create new incident
+                            var incident = new Incident
+                            {
+                                MonitoredServiceId = service.Id,
+                                StartTime = DateTime.UtcNow,
+                                Status = IncidentStatus.Active
+                            };
+                            db.Add(incident);
+                            logger.LogWarning("Incident created for service {ServiceName}", service.Name);
                         }
                     }
-                    // After window to Completed
-                    else if (m.EndTime <= now && m.Status != MaintenanceStatus.Completed)
+                    else
                     {
-                        m.Status = MaintenanceStatus.Completed;
-                        logger.LogInformation("Maintenance '{Title}' marked as COMPLETED", m.Title);
-                        db.Maintenances.Update(m);
-                    }
-                    // Before start to Scheduled
-                    else if (now < m.StartTime && m.Status == MaintenanceStatus.InProgress)
-                    {
-                        m.Status = MaintenanceStatus.Scheduled;
-                        db.Maintenances.Update(m);
+                        // Service is healthy again
+                        if (activeIncident != null)
+                        {
+                            activeIncident.Status = IncidentStatus.Resolved;
+                            activeIncident.EndTime = DateTime.UtcNow;
+                            db.Update(activeIncident);
+                            logger.LogInformation("Incident resolved for service {ServiceName}", service.Name);
+                        }
                     }
                 }
 
-                // === 3. Save everything ===
+                // === Save everything ===
                 await db.SaveChangesAsync(stoppingToken);
             }
             catch (Exception e)

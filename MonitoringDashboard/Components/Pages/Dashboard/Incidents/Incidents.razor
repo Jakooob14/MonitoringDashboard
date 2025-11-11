@@ -1,0 +1,35 @@
+﻿@page "/dashboard/incidents"
+@layout DashboardLayout
+@inject IServiceScopeFactory ScopeFactory
+@rendermode InteractiveServer
+
+
+<div class="flex justify-between items-end mb-6">
+    <h2 class="text-2xl">Incidents</h2>
+</div>
+
+<div class="grid gap-4">
+    @if (_incidents.Count == 0)
+    {
+        <span class="text-zinc-400">No incidents found.</span>
+    }
+    else
+    {
+        <div class="bg-neutral-800 !rounded shadow-lg border-1 border-zinc-700">
+            <table class="w-full">
+                <thead>
+                <tr>
+                    <th>nigga</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var incident in _incidents)
+                {
+                    <hr class="border-zinc-700 w-full" />
+                    <IncidentCard Incident="incident"/>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

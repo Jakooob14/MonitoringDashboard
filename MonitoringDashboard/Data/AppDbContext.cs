@@ -9,4 +9,5 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<ServiceCheck> ServiceChecks => Set<ServiceCheck>();
     public DbSet<DailyServiceStats> DailyServiceStats => Set<DailyServiceStats>();
     public DbSet<Maintenance> Maintenances => Set<Maintenance>();
+    public DbSet<Incident> Incidents => Set<Incident>();
 }
