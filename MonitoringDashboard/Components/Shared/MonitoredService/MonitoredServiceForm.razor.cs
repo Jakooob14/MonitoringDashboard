@@ -11,21 +11,15 @@ public partial class MonitoredServiceForm : ComponentBase
     [Parameter] public Data.Models.MonitoredService? EditMonitoredService { get; set; }
     
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnParametersSetAsync()
     {
-        if (firstRender)
+        if (EditMode && EditMonitoredService != null)
         {
-            if (EditMode)
-            {
-                if (EditMonitoredService == null) return;
-                
-                NewMonitoredService = EditMonitoredService;
-                StateHasChanged();
-            }
-            else
-            {
-                SetNameAsRandomPhrase();
-            }
+            NewMonitoredService = EditMonitoredService;
+        }
+        else
+        {
+            SetNameAsRandomPhrase();
         }
     }
 

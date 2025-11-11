@@ -19,16 +19,16 @@
         using var scope = ScopeFactory.CreateScope();
         await using var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        var maintenance = await db.MonitoredServices
+        var monitoredService = await db.MonitoredServices
             .FirstOrDefaultAsync(m => m.Id == Id);
         
-        if (maintenance == null)
+        if (monitoredService == null)
         {
             Nav.NavigateTo("/404");
             return;
         }
         
-        MonitoredService = maintenance;
+        MonitoredService = monitoredService;
     }
 
 }

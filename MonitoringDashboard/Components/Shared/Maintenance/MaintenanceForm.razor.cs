@@ -25,10 +25,8 @@ public partial class MaintenanceForm : ComponentBase
 
         AllMonitoredServices = await db.MonitoredServices.ToListAsync();
 
-        if (EditMode)
+        if (EditMode && EditMaintenance != null)
         {
-            if (EditMaintenance == null) return;
-            
             NewMaintenance = EditMaintenance;
             SelectedServiceIds = EditMaintenance.MonitoredServices.Select(s => s.Id).ToList();
         }
