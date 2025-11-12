@@ -9,7 +9,7 @@ namespace MonitoringDashboard.Components.Shared.MonitoredService;
 
 public partial class MonitoredServiceCardBase : ComponentBase
 {
-    [Parameter] public required Data.Models.MonitoredService MonitoredService { get; set; }
+    [Parameter] public required Data.Models.MonitoredService MonitoredService { get; set; } = new();
     [Inject] public IServiceScopeFactory ScopeFactory { get; set; } = null!;
 
     [Parameter] public TimeUnit DisplayUnit { get; set; } = TimeUnit.Days;
@@ -132,6 +132,31 @@ public partial class MonitoredServiceCardBase : ComponentBase
 
         int successful = _recentChecks.Count(c => c.IsSuccessful);
         return (float)Math.Round(successful * 100f / _recentChecks.Count, 2);
+    }
+
+    protected float GetUptimePercentageTimeSpan(TimeSpan timeSpan)
+    {
+        if (DisplayUnit == TimeUnit.Days)
+        {
+            if (_recentStats.Count == 0) return 0f;
+
+            var cutoffDate = (DateTime.UtcNow - timeSpan).Date;
+            var stats = _recentStats.Where(s => s.Date.Date >= cutoffDate).ToList();
+            if (!stats.Any()) return 0f;
+
+            int total = stats.Sum(s => s.TotalChecks);
+            int ok = stats.Sum(s => s.SuccessfulChecks);
+            return total == 0 ? 0f : (float)Math.Round(ok * 100f / total, 2);
+        }
+
+        if (_recentChecks.Count == 0) return 0f;
+
+        var cutoff = DateTime.UtcNow - timeSpan;
+        var checks = _recentChecks.Where(c => c.CheckedAt >= cutoff).ToList();
+        if (!checks.Any()) return 0f;
+
+        int successful = checks.Count(c => c.IsSuccessful);
+        return (float)Math.Round(successful * 100f / checks.Count, 2);
     }
 
     private async Task<string> GetLastIncidentString(AppDbContext db)

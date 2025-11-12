@@ -1,10 +1,33 @@
 ﻿@page "/dashboard/services/{Id:guid}"
+@using MonitoringDashboard.Components.Shared
 @using MonitoringDashboard.Components.Shared.Incidents
 @layout DashboardLayout
-@inject IServiceScopeFactory ScopeFactory
+@inherits MonitoringDashboard.Components.Shared.MonitoredService.MonitoredServiceCardBase
 @rendermode InteractiveServer
 
-<h1 class="text-5xl">Service</h1>
+<div class="mb-4">
+    <h1 class="text-4xl">@MonitoredService.Name</h1>
+    <NavLink Href="@MonitoredService.Url" class="text-xl">@MonitoredService.Url</NavLink>
+</div>
+
+<div class="p-4 bg-neutral-800 border border-zinc-700 rounded mb-6 border-s-4 @(ServiceUp ? "border-s-green-500" : "border-s-red-500")">
+    <ServiceStatusBar Statuses="Statuses"/>
+</div>
+
+<div class="flex w-full mb-6 flex-row gap-4 rounded">
+    <div class="w-full bg-neutral-800 p-4 flex flex-col justify-between rounded border border-zinc-700 border-b-0 text-center">
+        <span>Uptime (24 hours)</span>
+        <strong class="text-3xl">@GetUptimePercentageTimeSpan(TimeSpan.FromHours(24))%</strong>
+    </div>
+    <div class="w-full bg-neutral-800 p-4 flex flex-col justify-between rounded border border-zinc-700 border-b-0 text-center">
+        <span>Average response time (24 hours)</span>
+        <strong class="text-3xl">@GetAverageResponseTime(TimeSpan.FromHours(24))ms</strong>
+    </div>
+    <div class="w-full bg-neutral-800 p-4 flex flex-col justify-between rounded border border-zinc-700 border-b-0 text-center">
+        <span>Average response time (7 days)</span>
+        <strong class="text-3xl">@GetAverageResponseTime(TimeSpan.FromDays(7))ms</strong>
+    </div>
+</div>
 
 <IncidentsTable ServiceIncidents="_serviceIncidents" 
                 OnPageChanged="(currentPage) => UpdateIncidents(currentPage)"
