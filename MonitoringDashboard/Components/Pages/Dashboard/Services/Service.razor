@@ -3,6 +3,10 @@
 @layout DashboardLayout
 @inject IServiceScopeFactory ScopeFactory
 @rendermode InteractiveServer
+
 <h1 class="text-5xl">Service</h1>
 
-<IncidentsTable ServiceIncidents="_serviceIncidents"/>
+<IncidentsTable ServiceIncidents="_serviceIncidents" 
+                OnPageChanged="(currentPage) => UpdateIncidents(currentPage)"
+                OnMaxIncidentsToShowChanged="(maxIncidents) => HandleMaxIncidentsChanged(maxIncidents)"
+                TotalIncidentsCount="_totalIncidentsCount"/>

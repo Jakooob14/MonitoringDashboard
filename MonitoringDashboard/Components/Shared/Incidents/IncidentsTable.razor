@@ -1,4 +1,5 @@
 ﻿@using MonitoringDashboard.Data.Models
+@using MonitoringDashboard.Helpers
 
 <div class="grid gap-4">
     @if (ServiceIncidents.Count == 0)
@@ -7,31 +8,46 @@
     }
     else
     {
-        <div class="bg-neutral-800 rounded! shadow-lg border border-zinc-700">
+        <div class="bg-neutral-800 rounded shadow-lg border border-zinc-700">
             <table class="w-full">
                 <thead>
                 <tr class="bg-neutral-900">
-                    <th class="py-4 ps-4 text-start">Status</th>
-                    <th class="py-4 ps-4 text-start">Monitor</th>
-                    <th class="py-4 ps-4 text-start">Cause</th>
-                    <th class="py-4 ps-4 text-start">Started</th>
-                    <th class="py-4 ps-4 text-start">Ended</th>
-                    <th class="py-4 ps-4 text-start">Duration</th>
+                    <th class="py-4 ps-4 text-start w-[10%]">Status</th>
+                    <th class="py-4 ps-4 text-start w-[30%]">Cause</th>
+                    <th class="py-4 ps-4 text-start w-[20%]">Started</th>
+                    <th class="py-4 ps-4 text-start w-[20%]">Ended</th>
+                    <th class="py-4 ps-4 text-start w-[20%]">Duration</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach (var incident in ServiceIncidents)
                 {
-                    <IncidentCard Incident="incident"/>
+                    <tr class="border-t border-t-zinc-700">
+                        <td class="p-4">@incident.Status.ToPascalCaseString()</td>
+                        <td class="p-4">@incident.Cause</td>
+                        <td class="p-4">@incident.StartTime</td>
+                        <td class="p-4">@incident.EndTime</td>
+                        <td class="p-4">@((incident.EndTime - incident.StartTime)?.ToReadableString() ?? (DateTime.UtcNow - incident.StartTime).ToReadableString())</td>
+                    </tr>
                 }
                 </tbody>
             </table>
+            <div class="border-t border-t-zinc-700 p-4 bg-neutral-900 flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <span class="@($"button-primary {(_currentPage == 1 ? "cursor-not-allowed" : "cursor-pointer")}")" @onclick="() => HandlePageChanged(-1)">&lt;</span>
+                    <span>@_currentPage</span>
+                    <span class="@($"button-primary {(_currentPage == TotalPages ? "cursor-not-allowed" : "cursor-pointer")}")" @onclick="() => HandlePageChanged(1)">&gt;</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label for="pagesPerPage">Items per page</label>
+                    <InputSelect class="button-primary px-0 py-1 ps-2" TValue="int" id="pagesPerPage" @bind-Value="MaxIncidentsToShow" @oninput="HandleMaxIncidentsChanged">
+                        @foreach (int i in new[] { 5, 10, 25, 50, 100 })
+                        {
+                            <option value="@i" class="bg-neutral-800">@i</option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
         </div>
     }
 </div>
-
-@code {
-
-    [Parameter, EditorRequired] public List<Incident> ServiceIncidents { get; set; }
-
-}

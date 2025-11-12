@@ -63,7 +63,7 @@ h1:focus {
 
 @layer components {
     .input {
-        @apply bg-zinc-800 hover:bg-zinc-700 border-zinc-600 border-[1px] text-zinc-100 placeholder:text-zinc-500 focus:border-aero-400 outline-0 px-4 py-2 rounded-sm transition;
+        @apply bg-zinc-800 hover:bg-zinc-700 border-zinc-600 border text-zinc-100 placeholder:text-zinc-500 focus:border-aero-400 outline-0 px-4 py-2 rounded-sm transition;
     }
 
     .input:has(input.invalid),
@@ -72,7 +72,7 @@ h1:focus {
     }
     
     .button-primary {
-        @apply bg-neutral-800 hover:bg-neutral-700 border-zinc-700 border-[1px] text-zinc-100 px-4 py-2 rounded-sm transition cursor-pointer;
+        @apply bg-neutral-800 hover:bg-neutral-700 border-zinc-700 border text-zinc-100 px-4 py-2 rounded-sm transition cursor-pointer;
     }
     
     .shadow-uniform {
