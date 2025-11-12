@@ -1,0 +1,8 @@
+﻿@page "/dashboard/services/{Id:guid}"
+@using MonitoringDashboard.Components.Shared.Incidents
+@layout DashboardLayout
+@inject IServiceScopeFactory ScopeFactory
+@rendermode InteractiveServer
+<h1 class="text-5xl">Service</h1>
+
+<IncidentsTable ServiceIncidents="_serviceIncidents"/>

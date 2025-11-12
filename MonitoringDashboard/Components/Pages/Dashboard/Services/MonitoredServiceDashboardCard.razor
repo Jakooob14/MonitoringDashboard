@@ -2,7 +2,7 @@
 @inherits MonitoringDashboard.Components.Shared.MonitoredService.MonitoredServiceCardBase
 @inject NavigationManager Nav
 
-<div class="bg-neutral-800 p-6 rounded-sm flex flex-col gap-4 shadow-lg border-s-4 border-1 border-zinc-700 @(ServiceUp ? "border-s-green-500" : "border-s-red-500")">
+<NavLink Href="@($"/dashboard/services/{MonitoredService.Id}")" class="@($"bg-neutral-800 hover:bg-neutral-800/70 text-zinc-100 p-6 rounded-sm flex flex-col gap-4 shadow-lg border-s-4 border border-zinc-700 {(ServiceUp ? "border-s-green-500" : "border-s-red-500")}")">
     <div class="flex justify-between items-center">
         <div>
             <h2 class="text-2xl font-bold">@MonitoredService.Name</h2>
@@ -34,7 +34,7 @@
     @*         <ContextMenu style=@($"display: {(_contextMenuOpen ? "block" : "none")}") Items="_contextMenuItems" OnClose="() => _contextMenuOpen = false" /> *@
     @*     </div> *@
     @* </div> *@
-</div>
+</NavLink>
 
 <Modal @bind-IsOpen="_deleteModalOpen" 
        Title="Delete Service" 

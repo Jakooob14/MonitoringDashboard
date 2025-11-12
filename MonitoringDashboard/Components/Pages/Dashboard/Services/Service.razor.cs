@@ -3,25 +3,25 @@ using Microsoft.EntityFrameworkCore;
 using MonitoringDashboard.Data;
 using MonitoringDashboard.Data.Models;
 
-namespace MonitoringDashboard.Components.Pages.Dashboard.Incidents;
+namespace MonitoringDashboard.Components.Pages.Dashboard.Services;
 
-public partial class Incidents
+public partial class Service : ComponentBase
 {
-    private List<Incident> _incidents = new();
+    [Parameter] public Guid Id { get; set; }
+    
+    private List<Incident> _serviceIncidents = new();
 
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadIncidents();
-    }
-
-    private async Task LoadIncidents()
+    protected override async Task OnParametersSetAsync()
     {
         using var scope = ScopeFactory.CreateScope();
         await using var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        _incidents = await db.Incidents
+        
+        _serviceIncidents = await db.Incidents
             .Include(i => i.MonitoredService)
+            .Where(i => i.MonitoredServiceId == Id)
             .OrderByDescending(i => i.StartTime)
             .ToListAsync();
+
+        Console.WriteLine(Id);
     }
 }

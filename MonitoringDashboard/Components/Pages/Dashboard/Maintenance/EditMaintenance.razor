@@ -6,29 +6,6 @@
 @layout DashboardLayout
 @rendermode InteractiveServer
 
-@code {
-    [Parameter] public Guid Id { get; set; }
-    private Data.Models.Maintenance? Maintenance { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        using var scope = ScopeFactory.CreateScope();
-        await using var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        var maintenance = await db.Maintenances
-            .FirstOrDefaultAsync(m => m.Id == Id);
-        
-        if (maintenance == null)
-        {
-            Nav.NavigateTo("/404");
-            return;
-        }
-        
-        Maintenance = maintenance;
-    }
-
-}
-
 <h2 class="text-2xl font-bold mb-4">Edit Maintenance</h2>
 
 <MaintenanceForm EditMode="true" EditMaintenance="@Maintenance" />

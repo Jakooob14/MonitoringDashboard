@@ -27,7 +27,14 @@
 
     <ItemGroup>
       <AdditionalFiles Include="Components\Pages\Dashboard\Maintenance\Maintenance.razor" />
+      <AdditionalFiles Include="Components\Shared\Incidents\IncidentCard.razor" />
+      <AdditionalFiles Include="Components\Shared\Incidents\IncidentsTable.razor" />
       <AdditionalFiles Include="Components\Shared\Maintenance\MaintenanceCard.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Components\Pages\Dashboard\Incidents\IncidentCard.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\Dashboard\Incidents\Incidents.razor" />
     </ItemGroup>
 
 </Project>

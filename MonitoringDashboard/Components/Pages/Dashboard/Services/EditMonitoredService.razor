@@ -9,26 +9,3 @@
 <h3>Edit Monitored Service</h3>
 
 <MonitoredServiceForm EditMonitoredService="@MonitoredService" EditMode="true"/>
-
-@code {
-    [Parameter] public Guid Id { get; set; }
-    private Data.Models.MonitoredService? MonitoredService { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        using var scope = ScopeFactory.CreateScope();
-        await using var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        var monitoredService = await db.MonitoredServices
-            .FirstOrDefaultAsync(m => m.Id == Id);
-        
-        if (monitoredService == null)
-        {
-            Nav.NavigateTo("/404");
-            return;
-        }
-        
-        MonitoredService = monitoredService;
-    }
-
-}

@@ -1,15 +1,7 @@
-﻿@page "/dashboard/incidents"
-@layout DashboardLayout
-@inject IServiceScopeFactory ScopeFactory
-@rendermode InteractiveServer
-
-
-<div class="flex justify-between items-end mb-6">
-    <h2 class="text-5xl">Incidents</h2>
-</div>
+﻿@using MonitoringDashboard.Data.Models
 
 <div class="grid gap-4">
-    @if (_incidents.Count == 0)
+    @if (ServiceIncidents.Count == 0)
     {
         <span class="text-zinc-400">No incidents found.</span>
     }
@@ -28,7 +20,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach (var incident in _incidents)
+                @foreach (var incident in ServiceIncidents)
                 {
                     <IncidentCard Incident="incident"/>
                 }
@@ -37,3 +29,9 @@
         </div>
     }
 </div>
+
+@code {
+
+    [Parameter, EditorRequired] public List<Incident> ServiceIncidents { get; set; }
+
+}
