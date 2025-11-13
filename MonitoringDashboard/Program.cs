@@ -31,6 +31,9 @@ builder.Services.AddHttpClient<ServiceChecker>();
 builder.Services.AddHostedService<MonitoringWorker>();
 builder.Services.AddHostedService<CleanupWorker>();
 
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+
 builder.Services.AddSignalR();
 
 var app = builder.Build();
