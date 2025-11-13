@@ -36,7 +36,7 @@ public partial class SidepanelButton : ComponentBase, IDisposable
             .TrimEnd('/')
             .ToLowerInvariant();
 
-        return currentPath.Contains(targetPath) ||
+        return currentPath.EndsWith(targetPath) ||
                (string.IsNullOrEmpty(currentPath) && string.IsNullOrEmpty(targetPath));
     }
 }

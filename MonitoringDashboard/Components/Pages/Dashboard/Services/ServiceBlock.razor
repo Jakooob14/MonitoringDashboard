@@ -1,0 +1,7 @@
+﻿<div class="w-full bg-neutral-800 p-4 flex flex-col justify-between rounded border border-zinc-700 text-center">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

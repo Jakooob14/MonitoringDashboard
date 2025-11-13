@@ -15,20 +15,35 @@
 </div>
 
 <div class="flex w-full mb-6 flex-row gap-4 rounded">
-    <div class="w-full bg-neutral-800 p-4 flex flex-col justify-between rounded border border-zinc-700 border-b-0 text-center">
+    <ServiceBlock>
         <span>Uptime (24 hours)</span>
         <strong class="text-3xl">@GetUptimePercentageTimeSpan(TimeSpan.FromHours(24))%</strong>
-    </div>
-    <div class="w-full bg-neutral-800 p-4 flex flex-col justify-between rounded border border-zinc-700 border-b-0 text-center">
+    </ServiceBlock>
+    <ServiceBlock>
+        <span>Uptime (7 days)</span>
+        <strong class="text-3xl">@GetUptimePercentageTimeSpan(TimeSpan.FromDays(7))%</strong>
+    </ServiceBlock>
+    <ServiceBlock>
+        <span>Uptime (30 days)</span>
+        <strong class="text-3xl">@GetUptimePercentageTimeSpan(TimeSpan.FromDays(30))%</strong>
+    </ServiceBlock>
+    <ServiceBlock>
+        <span>Uptime (365 days)</span>
+        <strong class="text-3xl">@GetUptimePercentageTimeSpan(TimeSpan.FromDays(365))%</strong>
+    </ServiceBlock>
+</div>
+<div class="flex w-full flex-row gap-4 rounded">
+    <ServiceBlock>
         <span>Average response time (24 hours)</span>
         <strong class="text-3xl">@GetAverageResponseTime(TimeSpan.FromHours(24))ms</strong>
-    </div>
-    <div class="w-full bg-neutral-800 p-4 flex flex-col justify-between rounded border border-zinc-700 border-b-0 text-center">
+    </ServiceBlock>
+    <ServiceBlock>
         <span>Average response time (7 days)</span>
         <strong class="text-3xl">@GetAverageResponseTime(TimeSpan.FromDays(7))ms</strong>
-    </div>
+    </ServiceBlock>
 </div>
 
+<h2 class="text-3xl mb-3 mt-6">Incidents</h2>
 <IncidentsTable ServiceIncidents="_serviceIncidents" 
                 OnPageChanged="(currentPage) => UpdateIncidents(currentPage)"
                 OnMaxIncidentsToShowChanged="(maxIncidents) => HandleMaxIncidentsChanged(maxIncidents)"

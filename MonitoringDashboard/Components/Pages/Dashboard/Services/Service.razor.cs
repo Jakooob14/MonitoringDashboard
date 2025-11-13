@@ -60,7 +60,9 @@ public partial class Service
         if (_recentChecks.Count == 0) return 0;
 
         var cutoff = DateTime.UtcNow - timeSpan;
-        var checks = _recentChecks.Where(c => c.CheckedAt >= cutoff).ToList();
+        var checks = _recentChecks
+            .Where(c => c.CheckedAt >= cutoff && c.IsSuccessful)
+            .ToList();
         if (!checks.Any()) return 0;
 
         return (int)checks.Average(c => c.ResponseTimeMilliseconds);
