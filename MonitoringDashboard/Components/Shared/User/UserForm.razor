@@ -1,0 +1,41 @@
+﻿@inject IServiceScopeFactory ScopeFactory
+@inject NavigationManager Nav
+
+<EditForm FormName="createUser" Model="NewUser" OnValidSubmit="HandleUser">
+    <DataAnnotationsValidator/>
+    
+    <div class="mb-4">
+        <label for="username" class="block mb-1">Username</label>
+        <InputText id="username" class="input w-full" @bind-Value="NewUser.UserName" />
+    </div>
+    <div class="mb-4">
+        <label for="email" class="block mb-1">Email</label>
+        <InputText id="email" class="input w-full" @bind-Value="NewUser.Email" />
+    </div>
+    @if (EditUserId == null)
+    {
+        <div class="mb-4">
+            <label for="password" class="block mb-1">Password</label>
+            <InputText id="password" type="password" class="input w-full" @bind-Value="_password" />
+        </div>
+    }
+    
+    <div class="mb-4">
+        <label for="role" class="block mb-1">Role</label>
+        <InputSelect id="role" class="input w-full" @bind-Value="_selectedRole">
+            @foreach (var role in _roles)
+            {
+                <option value="@role">@role</option>
+            }
+        </InputSelect>
+    </div>
+    
+    <button type="submit" class="button-primary">@(EditUserId == null ? "Create" : "Update") User</button>
+    
+    <ul>
+        @foreach (var error in _errors)
+        {
+            <li class="text-red-500">@error</li>
+        }
+    </ul>
+</EditForm>

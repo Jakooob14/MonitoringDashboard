@@ -1,0 +1,13 @@
+﻿@page "/dashboard/users/edit/{Id}"
+@using MonitoringDashboard.Components.Shared.User
+@layout DashboardLayout
+@rendermode InteractiveServer
+
+<h3>Add User</h3>
+
+<UserForm EditUserId="@Id"/>
+
+@code
+{
+    [Parameter] public string Id { get; set; } = string.Empty;
+}
