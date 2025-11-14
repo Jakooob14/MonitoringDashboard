@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Identity;
 using MonitoringDashboard.Data.Models;
 
 namespace MonitoringDashboard.Components.Pages.Auth;

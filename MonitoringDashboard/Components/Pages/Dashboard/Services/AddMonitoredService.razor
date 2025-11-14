@@ -2,6 +2,7 @@
 @using MonitoringDashboard.Components.Shared.MonitoredService
 @layout DashboardLayout
 @rendermode InteractiveServer
+@attribute [Authorize(Roles = "Admin,User")]
 
 <h3>Add Monitored Service</h3>
 

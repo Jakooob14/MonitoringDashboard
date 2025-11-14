@@ -7,7 +7,7 @@ public partial class Login
 {
     [SupplyParameterFromForm] private LoginModel Input { get; set; } = new();
     [SupplyParameterFromQuery] public string? ReturnUrl { get; set; }
-    
+
     private async Task HandleLogin()
     {
         var res = await SignInManager.PasswordSignInAsync(Input.Username, Input.Password, true, false);

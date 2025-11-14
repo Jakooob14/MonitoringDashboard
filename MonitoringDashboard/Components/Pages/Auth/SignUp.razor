@@ -1,10 +1,12 @@
 ﻿@page "/signup"
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Identity
 @using MonitoringDashboard.Data.Models
 @inject NavigationManager Nav
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 @inject IUserStore<User> UserStore
+@inject AuthenticationStateProvider AuthStateProvider
 @rendermode InteractiveServer
 
 <div class="w-96">

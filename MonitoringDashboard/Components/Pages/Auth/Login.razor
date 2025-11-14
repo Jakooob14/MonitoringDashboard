@@ -1,8 +1,10 @@
 ﻿@page "/login"
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Identity
 @using MonitoringDashboard.Data.Models
 @inject NavigationManager Nav
 @inject SignInManager<User> SignInManager
+@inject AuthenticationStateProvider AuthStateProvider
 
 <h3>Login</h3>
 

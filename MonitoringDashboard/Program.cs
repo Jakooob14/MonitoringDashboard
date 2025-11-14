@@ -47,6 +47,15 @@ builder.Services.AddAuthentication(options =>
     })
     .AddIdentityCookies();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/login";
+    options.AccessDeniedPath = "/login";
+    options.LogoutPath = "/logout";
+
+    options.SlidingExpiration = true;
+});
+
 builder.Services.AddIdentityCore<User>(options =>
     {
         options.SignIn.RequireConfirmedAccount = false;
@@ -85,7 +94,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAntiforgery();
 
 app.MapStaticAssets();
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
@@ -94,6 +102,8 @@ app.MapControllers();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapAdditionalIdentityEndpoints();
+
+app.UseAntiforgery();
 
 await IdentitySeeder.SeedRolesAsync(app);
 await IdentitySeeder.SeedAdminUserAsync(app);

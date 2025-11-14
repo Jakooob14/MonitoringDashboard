@@ -5,6 +5,7 @@
 @inject IServiceScopeFactory ScopeFactory
 @inject NavigationManager Nav
 @rendermode InteractiveServer
+@attribute [Authorize(Roles = "Admin,User")]
 
 <h3>Edit Monitored Service</h3>
 
