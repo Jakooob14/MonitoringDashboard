@@ -1,0 +1,33 @@
+﻿@page "/dashboard/users/add"
+@layout DashboardLayout
+@inject IServiceScopeFactory ScopeFactory
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+<h3>Add User</h3>
+
+<EditForm FormName="createUser" Model="NewUser" OnValidSubmit="HandleAddUser">
+    <DataAnnotationsValidator/>
+    
+    <div class="mb-4">
+        <label for="username" class="block mb-1">Username</label>
+        <InputText id="username" class="input w-full" @bind-Value="NewUser.UserName" />
+    </div>
+    <div class="mb-4">
+        <label for="email" class="block mb-1">Email</label>
+        <InputText id="email" class="input w-full" @bind-Value="NewUser.Email" />
+    </div>
+    <div class="mb-4">
+        <label for="password" class="block mb-1">Password</label>
+        <InputText id="password" type="password" class="input w-full" @bind-Value="_password" />
+    </div>
+    
+    <button type="submit" class="button-primary">Create User</button>
+    
+    <ul>
+        @foreach (var error in _errors)
+        {
+            <li class="text-red-500">@error</li>
+        }
+    </ul>
+</EditForm>

@@ -32,7 +32,6 @@
 
     <ItemGroup>
       <AdditionalFiles Include="Components\Pages\Dashboard\Maintenance\Maintenance.razor" />
-      <AdditionalFiles Include="Components\Shared\Incidents\IncidentCard.razor" />
       <AdditionalFiles Include="Components\Shared\Incidents\IncidentsTable.razor" />
       <AdditionalFiles Include="Components\Shared\Maintenance\MaintenanceCard.razor" />
     </ItemGroup>

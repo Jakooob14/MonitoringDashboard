@@ -1,4 +1,6 @@
-﻿<aside class="fixed w-[320px] h-screen bg-neutral-800 p-8">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+
+<aside class="fixed w-[320px] h-screen bg-neutral-800 p-8">
     <div class="flex flex-col justify-between h-full">
         <ul class="flex flex-col gap-y-4">
             <li>
@@ -7,6 +9,9 @@
             </li>
             <li><SidepanelButton Text="Services" IconPath="icons/service.svg" Href="/dashboard/services"/></li>
             <li><SidepanelButton Text="Maintenance" IconPath="icons/wrench.svg" Href="/dashboard/maintenance"/></li>
+            <AuthorizeView Roles="Admin">
+                <li><SidepanelButton Text="Users" IconPath="icons/users.svg" Href="/dashboard/users"/></li>
+            </AuthorizeView>
         </ul>
         <div>
             <SidepanelButton Text="Log Out" Href="/logout"/>

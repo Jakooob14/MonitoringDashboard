@@ -1,0 +1,49 @@
+﻿@page "/dashboard/users"
+@using MonitoringDashboard.Components.Shared
+@inject IServiceScopeFactory ScopeFactory
+@rendermode InteractiveServer
+
+<div class="flex justify-between items-end mb-6">
+    <h2 class="text-5xl">Users</h2>
+    <NavLink class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded" Href="/dashboard/users/add">
+        Add User
+    </NavLink>
+</div>
+
+<div class="bg-neutral-800 rounded shadow-lg border border-zinc-700">
+    <table class="table-auto w-full">
+        <thead>
+        <tr class="bg-neutral-900">
+            <th class="py-4 ps-4 text-start">Username</th>
+            <th class="py-4 ps-4 text-start">Email</th>
+            <th class="py-4 ps-4 text-start">Role</th>
+            <th class="py-4 pe-4 text-end">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in _users)
+        {
+            <tr class="border-t border-neutral-700">
+                <td class="p-4">@user.UserName</td>
+                <td class="p-4">@user.Email</td>
+                <td class="p-4">@_roles[user.Id]</td>
+                <td class="p-4 flex justify-end gap-2">
+                    <button class="button-primary flex items-center gap-2 text-sm font-medium text-red-400 transition-colors @(_roles[user.Id].Contains("Admin") ? "opacity-50 cursor-not-allowed" : "")"
+                            @onclick='() => { if (!_roles[user.Id].Contains("Admin")) OpenDeleteModal(user); }'>
+                        <Icon Path="icons/trash-can.svg" />
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<Modal @bind-IsOpen="_deleteModalOpen" 
+       Title="Delete Service" 
+       OnConfirm="HandleDeleteConfirm" 
+       ConfirmButtonText="Delete"
+       ConfirmButtonClass="bg-red-500 hover:bg-red-600 !text-zinc-100">
+    <p>Are you sure you want to delete this service?</p>
+</Modal>
