@@ -1,0 +1,26 @@
+﻿@page "/login"
+@using Microsoft.AspNetCore.Identity
+@using MonitoringDashboard.Data.Models
+@inject NavigationManager Nav
+@inject SignInManager<User> SignInManager
+
+<h3>Login</h3>
+
+<div class="w-96">
+    <EditForm FormName="loginForm" method="post" Model="Input" OnValidSubmit="HandleLogin" class="flex flex-col gap-4">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+    
+        <div>
+            <label for="username">Username</label>
+            <InputText id="username" class="input w-full" @bind-Value="Input.Username" />
+        </div>
+    
+        <div>
+            <label for="password">Password</label>
+            <InputText id="password" type="password" class="input w-full" @bind-Value="Input.Password" />
+        </div>
+    
+        <button type="submit" class="button-primary">Login</button>
+    </EditForm>
+</div>

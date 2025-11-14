@@ -1,9 +1,11 @@
 ﻿@page "/dashboard/services/{Id:guid}"
+@using Microsoft.AspNetCore.Authorization
 @using MonitoringDashboard.Components.Shared
 @using MonitoringDashboard.Components.Shared.Incidents
 @layout DashboardLayout
 @inherits MonitoringDashboard.Components.Shared.MonitoredService.MonitoredServiceCardBase
 @rendermode InteractiveServer
+@attribute [Authorize]
 
 <div class="mb-4">
     <h1 class="text-4xl">@MonitoredService.Name</h1>

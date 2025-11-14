@@ -1,0 +1,32 @@
+﻿@page "/signup"
+@using Microsoft.AspNetCore.Identity
+@using MonitoringDashboard.Data.Models
+@inject NavigationManager Nav
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject IUserStore<User> UserStore
+@rendermode InteractiveServer
+
+<div class="w-96">
+    <EditForm FormName="signupForm" Model="_formData" OnValidSubmit="HandleSignup" class="flex flex-col gap-4">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+    
+        <div>
+            <label for="username">Username</label>
+            <InputText id="username" class="input w-full" @bind-Value="_formData.Username" />
+        </div>
+    
+        <div>
+            <label for="email">Email</label>
+            <InputText id="email" class="input w-full" @bind-Value="_formData.Email" />
+        </div>
+    
+        <div>
+            <label for="password">Password</label>
+            <InputText id="password" type="password" class="input w-full" @bind-Value="_formData.Password" />
+        </div>
+    
+        <button type="submit" class="button-primary">Sign Up</button>
+    </EditForm>
+</div>

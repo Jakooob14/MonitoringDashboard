@@ -1,7 +1,40 @@
 ﻿@page "/dashboard/maintenance/add"
+@using Microsoft.AspNetCore.Components.Authorization
 @using MonitoringDashboard.Components.Shared.Maintenance
 @layout DashboardLayout
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+@inject IJSRuntime JS
 
 <h2 class="text-2xl font-bold mb-4">Add Maintenance</h2>
 
 <MaintenanceForm/>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        try
+        {
+            // This will only work once Blazor is interactive
+            await JS.InvokeVoidAsync("console.log", "DashboardLayout interactive");
+
+            var state = await AuthStateProvider.GetAuthenticationStateAsync();
+            bool loggedIn = state.User.Identity?.IsAuthenticated ?? false;
+
+            Console.WriteLine("LOGGED IN? " + loggedIn);
+
+            if (!loggedIn)
+            {
+                Nav.NavigateTo("/login", true);
+            }
+        }
+        catch
+        {
+            // Still prerendering → ignore
+        }
+    }
+}

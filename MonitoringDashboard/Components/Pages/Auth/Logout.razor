@@ -1,0 +1,16 @@
+﻿@page "/logout"
+@using Microsoft.AspNetCore.Identity
+@using MonitoringDashboard.Data.Models
+@inject SignInManager<User> SignInManager
+@inject NavigationManager Nav
+
+<h3>Logging out...</h3>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await SignInManager.SignOutAsync();
+        Nav.NavigateTo("/", true);
+    }
+
+}

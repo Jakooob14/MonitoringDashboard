@@ -1,7 +1,12 @@
+using System.Text;
 using DotNetEnv;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MonitoringDashboard.Components;
 using MonitoringDashboard.Data;
+using MonitoringDashboard.Data.Models;
 using MonitoringDashboard.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+    
+builder.Services.AddCascadingAuthenticationState();
 
 // Disable detailed logging
 builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
@@ -27,12 +34,43 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddHttpClient<ServiceChecker>();
+builder.Services.AddHttpClient("BrowserClient")
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler());
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = IdentityConstants.ApplicationScheme;
+        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+    })
+    .AddIdentityCookies();
+
+builder.Services.AddIdentityCore<User>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+        options.SignIn.RequireConfirmedEmail = false;
+        options.SignIn.RequireConfirmedPhoneNumber = false;
+    })
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddSignInManager()
+    .AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/login";
+    options.LogoutPath = "/logout";
+});
 
 builder.Services.AddHostedService<MonitoringWorker>();
 builder.Services.AddHostedService<CleanupWorker>();
 
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+// builder.Services.AddScoped<IAuthService, AuthService>();
+// builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+builder.Services.AddControllers();
 
 builder.Services.AddSignalR();
 
@@ -47,12 +85,17 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-
 app.UseAntiforgery();
 
 app.MapStaticAssets();
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+app.MapControllers();
+
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapAdditionalIdentityEndpoints();
+
+await IdentitySeeder.SeedRolesAsync(app);
+await IdentitySeeder.SeedAdminUserAsync(app);
 
 app.Run();
