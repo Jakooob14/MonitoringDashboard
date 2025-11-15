@@ -1,0 +1,24 @@
+﻿@inject IJSRuntime JS
+
+<div @attributes="AdditionalAttributes">
+    <div class="absolute top-0 left-0 bg-zinc-800 shadow-uniform p-2 z-3000 rounded-sm border border-zinc-700 min-w-[200px]">
+        @foreach (var item in Items)
+        {
+            @if (item.Href == null)
+            {
+                <ContextMenuItemButton Item="item" OnItemClick="HandleItemClick" />
+            } else
+            {
+                <NavLink Href="@item.Href" class="no-underline text-inherit">
+                    <ContextMenuItemButton Item="item" OnItemClick="HandleItemClick" />
+                </NavLink>
+            }
+            
+            @if (item != Items.Last())
+            {
+                <hr class="border-zinc-700 my-2" />
+            }
+        }
+    </div>
+    <div class="fixed inset-0 top-0 left-0 w-screen h-screen z-2000" @onclick="CloseMenu"></div>
+</div>

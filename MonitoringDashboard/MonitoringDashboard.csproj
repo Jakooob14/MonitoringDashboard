@@ -39,6 +39,7 @@
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Components\Pages\Dashboard\Incidents\IncidentCard.razor" />
       <_ContentIncludedByDefault Remove="Components\Pages\Dashboard\Incidents\Incidents.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\Profile\Profile.razor" />
     </ItemGroup>
 
 </Project>

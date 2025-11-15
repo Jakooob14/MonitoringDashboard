@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MonitoringDashboard.Components.Shared;
+using MonitoringDashboard.Components.Shared.ContextMenu;
 
 namespace MonitoringDashboard.Components.Pages.Dashboard.Services;
 

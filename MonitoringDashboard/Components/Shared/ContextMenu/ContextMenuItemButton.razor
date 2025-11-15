@@ -1,0 +1,23 @@
+﻿<div class="p-2 hover:bg-neutral-700 cursor-pointer rounded-sm flex items-center gap-2 @(Item.Disabled ? "opacity-50 cursor-not-allowed" : "")"
+     @onclick="() => HandleItemClick(Item)">
+    @if (Item.IconPath != string.Empty)
+    {
+        <Icon Path="@Item.IconPath" Class="w-5 h-5" />
+    }
+    @Item.Text
+</div>
+
+@code {
+    [Parameter] public ContextMenu.ContextMenuItem Item { get; set; } = new ContextMenu.ContextMenuItem();
+    [Parameter] public EventCallback<ContextMenu.ContextMenuItem> OnItemClick { get; set; }
+    
+    private async Task HandleItemClick(ContextMenu.ContextMenuItem item)
+    {
+        if (item.Disabled) return;
+
+        if (OnItemClick.HasDelegate)
+        {
+            await OnItemClick.InvokeAsync(item);
+        }
+    }
+}

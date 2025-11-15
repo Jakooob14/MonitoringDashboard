@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 
-namespace MonitoringDashboard.Components.Shared;
+namespace MonitoringDashboard.Components.Shared.ContextMenu;
 
 public partial class ContextMenu : ComponentBase
 {
@@ -18,6 +18,7 @@ public partial class ContextMenu : ComponentBase
         public string Text { get; set; } = string.Empty;
         public string IconPath { get; set; } = string.Empty;
         public Action? OnClick { get; set; }
+        public string? Href { get; set; }
         public bool Disabled { get; set; }
     }
     
