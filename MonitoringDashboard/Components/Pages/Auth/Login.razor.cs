@@ -10,7 +10,14 @@ public partial class Login
 
     private async Task HandleLogin()
     {
-        var res = await SignInManager.PasswordSignInAsync(Input.Username, Input.Password, true, false);
+        var user = await UserManager.FindByEmailAsync(Input.Email);
+        if (user == null)
+        {
+            // TODO: Show error message
+            return;
+        }
+        
+        var res = await SignInManager.PasswordSignInAsync(user, Input.Password, true, lockoutOnFailure: false);
 
         if (!res.Succeeded)
         {
@@ -23,7 +30,7 @@ public partial class Login
     
     private class LoginModel
     {
-        public string Username { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
     }
 }

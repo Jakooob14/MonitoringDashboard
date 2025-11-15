@@ -4,7 +4,7 @@
 @using MonitoringDashboard.Data.Models
 @inject NavigationManager Nav
 @inject SignInManager<User> SignInManager
-@inject AuthenticationStateProvider AuthStateProvider
+@inject UserManager<User> UserManager
 
 <h3>Login</h3>
 
@@ -14,8 +14,8 @@
         <ValidationSummary />
     
         <div>
-            <label for="username">Username</label>
-            <InputText id="username" class="input w-full" @bind-Value="Input.Username" />
+            <label for="email">E-Mail</label>
+            <InputText id="email" class="input w-full" @bind-Value="Input.Email" />
         </div>
     
         <div>
