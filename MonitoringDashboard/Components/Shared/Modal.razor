@@ -1,7 +1,7 @@
 ﻿@if (IsOpen)
 {
     <div class="fixed inset-0 bg-black/50 z-[10000]" @onclick="Close">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] bg-zinc-800 p-6 rounded-sm flex flex-col gap-4 shadow-lg border-zinc-700"
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] bg-neutral-800 p-6 rounded-sm flex flex-col gap-4 shadow-lg border-zinc-700"
              @onclick:stopPropagation>
             <header class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-bold">@Title</h3>

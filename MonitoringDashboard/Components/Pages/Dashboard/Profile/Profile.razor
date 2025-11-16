@@ -1,5 +1,6 @@
 ﻿@page "/dashboard/profile"
 @using Microsoft.AspNetCore.Components.Authorization
+@using MonitoringDashboard.Components.Shared
 @inject AuthenticationStateProvider AuthStateProvider
 @inject IServiceScopeFactory ScopeFactory
 @inject NavigationManager Nav
@@ -20,13 +21,12 @@
         <InputText class="input" id="email" @bind-Value="ProfileModel.Email"/>
     </div>
     
-    @* <div class="flex flex-col w-full"> *@
-    @*     <label for="password">Password</label> *@
-    @*     <InputText class="input" id="password" @bind-Value="_editProfileModel.Password"/> *@
-    @* </div> *@
+    <div class="flex flex-col w-full">
+        <button class="button-primary" type="button" @onclick="() => _changePasswordModalOpen = true">Change Password</button>
+    </div>
     
-    <ul>
-        @foreach (var error in _errors)
+    <ul class="text-red-400">
+        @foreach (var error in _profileErrors)
         {
             <li>@error</li>
         }
@@ -34,3 +34,34 @@
     
     <button type="submit" class="input">Update</button>
 </EditForm>
+
+<Modal Title="Change Password" @bind-IsOpen="_changePasswordModalOpen" ShowFooter="false">
+    <EditForm FormName="changePassword" Model="ChangePasswordModelValues" OnValidSubmit="HandleChangePassword" class="flex flex-col gap-4">
+        <DataAnnotationsValidator/>
+        
+        <div class="flex flex-col w-full">
+            <label for="currentPassword">Current Password</label>
+            <InputText class="input" id="currentPassword" type="password" @bind-Value="ChangePasswordModelValues.CurrentPassword"/>
+        </div>
+        
+        <div class="flex flex-col w-full">
+            <label for="newPassword">New Password</label>
+            <InputText class="input" id="newPassword" type="password" @bind-Value="ChangePasswordModelValues.NewPassword"/>
+        </div>
+        
+        <div class="flex flex-col w-full">
+            <label for="confirmNewPassword">Confirm New Password</label>
+            <InputText class="input" id="confirmNewPassword" type="password" @bind-Value="ChangePasswordModelValues.ConfirmNewPassword"/>
+        </div>
+        
+        <ul class="text-red-400">
+            @foreach (var error in _passwordErrors)
+            {
+                <li>@error</li>
+            }
+        </ul>
+        
+        <button type="submit" class="input">Change Password</button>
+        
+    </EditForm>
+</Modal>

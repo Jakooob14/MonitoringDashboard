@@ -7,7 +7,12 @@ namespace MonitoringDashboard.Components.Pages.Dashboard.Profile;
 public partial class Profile
 {
     [SupplyParameterFromForm] public EditProfileModel ProfileModel { get; set; } = new();
-    private List<string> _errors = new();
+    [SupplyParameterFromForm] public ChangePasswordModel ChangePasswordModelValues { get; set; } = new();
+    
+    private List<string> _profileErrors = new();
+    private List<string> _passwordErrors = new();
+    
+    private bool _changePasswordModalOpen;
 
     protected override async Task OnInitializedAsync()
     {
@@ -51,7 +56,7 @@ public partial class Profile
             }
             else
             {
-                _errors = result.Errors.Select(e => e.Description).ToList();
+                _profileErrors = result.Errors.Select(e => e.Description).ToList();
             }
         }
     }
@@ -61,5 +66,35 @@ public partial class Profile
         public string Id { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
+    }
+    
+    private async Task HandleChangePassword()
+    {
+        using var scope = ScopeFactory.CreateScope();
+        using var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        
+        var user = await userManager.FindByIdAsync(ProfileModel.Id);
+        
+        if (user != null)
+        {
+            var result = await userManager.ChangePasswordAsync(user, ChangePasswordModelValues.CurrentPassword, ChangePasswordModelValues.NewPassword);
+            if (result.Succeeded)
+            {
+                _changePasswordModalOpen = false;
+                ChangePasswordModelValues = new ChangePasswordModel();
+                Nav.NavigateTo("/logout", true);
+            }
+            else
+            {
+                _passwordErrors = result.Errors.Select(e => e.Description).ToList();
+            }
+        }
+    }
+    
+    public class ChangePasswordModel
+    {
+        public string CurrentPassword { get; set; } = string.Empty;
+        public string NewPassword { get; set; } = string.Empty;
+        public string ConfirmNewPassword { get; set; } = string.Empty;
     }
 }
