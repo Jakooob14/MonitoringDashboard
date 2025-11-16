@@ -9,16 +9,18 @@
 
 <PageTitle>Home</PageTitle>
 
+<Header></Header>
+
 <section class="container mx-auto mt-12">
-    <section class="flex justify-between">
+    <section class="flex justify-between items-center">
         <div>
-            <h1 class="text-5xl">Status</h1>
+            @* <h1 class="text-5xl">Status</h1> *@
         </div>
         <div>
             <RefreshTimer OnRefresh="StateHasChanged"/>
         </div>
     </section>
-    <section class="bg-zinc-800 p-6 rounded-sm shadow-lg mt-4 text-2xl font-bold flex justify-center border border-zinc-700">
+    <section class="bg-neutral-800 p-6 rounded-sm shadow-lg mt-4 text-2xl font-bold flex justify-center border border-zinc-700">
         @if (_failedServicesCount > 0)
         {
             <span>@_failedServicesCount service@(_failedServicesCount > 1 ? "s are" : " is") currently down</span>

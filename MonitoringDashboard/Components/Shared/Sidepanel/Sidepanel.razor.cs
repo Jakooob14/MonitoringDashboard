@@ -19,7 +19,8 @@ public partial class Sidepanel
         {
             Text = "Logout",
             IconPath = "icons/logout.svg",
-            Href = "/logout"
+            Href = "/logout",
+            ForceLoad = true
         }
     };
 

@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthStateProvider
+
+<header class="container mx-auto mt-6">
+    <nav class="flex justify-between items-center #bg-neutral-800 rounded #shadow-lg #border border-zinc-700">
+        <div>
+            <NavLink Href="/" class="text-4xl">Monitoring Dashboard</NavLink>
+        </div>
+        <div>
+            @if (_isLoggedIn)
+            {
+                <NavLink Href="/dashboard" class="button-primary">Dashboard</NavLink>
+            }
+            else
+            {
+                <NavLink Href="/login" class="button-primary">Log In</NavLink>
+            }
+        </div>
+    </nav>
+</header>
+
+@code {
+    private bool _isLoggedIn;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            _isLoggedIn = true;
+        }
+    }
+
+}

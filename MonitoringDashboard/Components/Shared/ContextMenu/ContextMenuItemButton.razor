@@ -8,7 +8,7 @@
 </div>
 
 @code {
-    [Parameter] public ContextMenu.ContextMenuItem Item { get; set; } = new ContextMenu.ContextMenuItem();
+    [Parameter] public ContextMenu.ContextMenuItem Item { get; set; } = new();
     [Parameter] public EventCallback<ContextMenu.ContextMenuItem> OnItemClick { get; set; }
     
     private async Task HandleItemClick(ContextMenu.ContextMenuItem item)

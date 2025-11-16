@@ -20,6 +20,7 @@ public partial class ContextMenu : ComponentBase
         public Action? OnClick { get; set; }
         public string? Href { get; set; }
         public bool Disabled { get; set; }
+        public bool ForceLoad { get; set; }
     }
     
     private async Task CloseMenu(MouseEventArgs e)
@@ -32,6 +33,12 @@ public partial class ContextMenu : ComponentBase
     private async Task HandleItemClick(ContextMenuItem item)
     {
         if (item.Disabled) return;
+
+        if (item.Href != null && item.ForceLoad)
+        {
+            Nav.NavigateTo(item.Href, true);
+            return;
+        }
         
         await OnClose.InvokeAsync(null);
         item.OnClick?.Invoke();
