@@ -20,7 +20,12 @@ public partial class SidepanelButton : ComponentBase, IDisposable
     
     protected override void OnInitialized()
     {
-        _locationChangedHandler = (_, __) => StateHasChanged();
+        _locationChangedHandler = (_, __) =>
+        {
+            _active = IsActive();
+            InvokeAsync(StateHasChanged);
+        };
+
         Nav.LocationChanged += _locationChangedHandler;
 
         _active = IsActive();
