@@ -7,6 +7,16 @@ public partial class Login
 {
     [SupplyParameterFromForm] private LoginModel Input { get; set; } = new();
     [SupplyParameterFromQuery] public string? ReturnUrl { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            Nav.NavigateTo("/dashboard");
+        }
+    }
 
     private async Task HandleLogin()
     {

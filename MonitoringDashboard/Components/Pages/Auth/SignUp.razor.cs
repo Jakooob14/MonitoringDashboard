@@ -8,6 +8,16 @@ public partial class SignUp
 {
     private SignupModal _formData = new();
     
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            Nav.NavigateTo("/dashboard");
+        }
+    }
+    
     private async Task HandleSignup()
     {
         var form = new MultipartFormDataContent();
