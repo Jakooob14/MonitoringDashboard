@@ -63,7 +63,7 @@ h1:focus {
 
 @layer components {
     .input {
-        @apply bg-zinc-800 hover:bg-zinc-700 border-zinc-600 border text-zinc-100 placeholder:text-zinc-500 focus:border-aero-400 outline-0 px-4 py-2 rounded-sm transition;
+        @apply bg-neutral-800 hover:bg-neutral-700 border-zinc-600 border text-zinc-100 placeholder:text-zinc-500 focus:border-aero-400 outline-0 px-4 py-2 rounded-sm transition;
     }
 
     .input:has(input.invalid),
