@@ -1,7 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Identity
 @using MonitoringDashboard.Components.Shared.ContextMenu
-@using MonitoringDashboard.Data.Models
 @inject AuthenticationStateProvider AuthStateProvider
 @inject IServiceScopeFactory ScopeFactory
 @rendermode InteractiveServer
@@ -29,7 +28,7 @@
                 </div>
                 @if (_isContextMenuOpen)
                 {
-                    <ContextMenu Items="_contextMenuItems" OnClose="() => _isContextMenuOpen = false"/>
+                    <ContextMenu class="left-1/2 -translate-x-1/2 -top-[70%]!" Items="_contextMenuItems" OnClose="() => _isContextMenuOpen = false"/>
                 }
             </div>
         }

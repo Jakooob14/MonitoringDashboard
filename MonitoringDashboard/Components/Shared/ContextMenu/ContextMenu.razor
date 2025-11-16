@@ -1,8 +1,8 @@
 ﻿@inject IJSRuntime JS
 @inject NavigationManager Nav
 
-<div @attributes="AdditionalAttributes">
-    <div class="absolute top-0 left-0 bg-zinc-800 shadow-uniform p-2 z-3000 rounded-sm border border-zinc-700 min-w-[200px]">
+<div>
+    <div class="absolute top-0 left-0 bg-neutral-800 shadow-uniform p-2 z-3000 rounded-sm border border-zinc-700 min-w-[200px] @(AdditionalAttributes?["class"])">
         @foreach (var item in Items)
         {
             @if (item.Href == null && !item.ForceLoad)
