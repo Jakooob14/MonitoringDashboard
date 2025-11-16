@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using MonitoringDashboard.Components.Shared.Enums;
 using MonitoringDashboard.Data.Models;
 
 namespace MonitoringDashboard.Services;
@@ -10,7 +11,7 @@ public static class IdentitySeeder
         using var scope = app.Services.CreateScope();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-        string[] roles = { "Admin", "User", "Viewer" };
+        string[] roles = Enum.GetNames<Role>();
 
         foreach (var role in roles)
         {
@@ -35,7 +36,7 @@ public static class IdentitySeeder
         
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 
-        var admins = await userManager.GetUsersInRoleAsync("Admin");
+        var admins = await userManager.GetUsersInRoleAsync(nameof(Role.Admin));
 
         if (admins.Count == 0)
         {
@@ -50,7 +51,7 @@ public static class IdentitySeeder
 
             if (creation.Succeeded)
             {
-                await userManager.AddToRoleAsync(defaultAdmin, "Admin");
+                await userManager.AddToRoleAsync(defaultAdmin, nameof(Role.Admin));
                 Console.WriteLine("Default admin user created successfully.");
             }
             else

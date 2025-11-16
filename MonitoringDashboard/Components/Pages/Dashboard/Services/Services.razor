@@ -1,17 +1,22 @@
 ﻿@page "/dashboard/services"
 @using MonitoringDashboard.Components.Shared
 @using MonitoringDashboard.Components.Shared.MonitoredService
+@using MonitoringDashboard.Services
 @layout DashboardLayout
 @inject IServiceScopeFactory ScopeFactory
+@inject IUserContextService UserContextService
 @rendermode InteractiveServer
 
 <section>
     <div class="mb-6">
         <div class="flex justify-between items-center">
             <h1 class="text-5xl">Services</h1>
-            <NavLink class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded" Href="/dashboard/maintenance/add">
-                Add Service
-            </NavLink>
+            @if (_isAdmin || _isUser)
+            {
+                <NavLink class="button-primary" Href="/dashboard/services/add">
+                    Add Service
+                </NavLink>
+            }
         </div>
         <RefreshTimer OnRefresh="UpdateMonitoredServices"/>
     </div>

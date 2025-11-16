@@ -1,14 +1,19 @@
 ﻿@page "/dashboard/maintenance"
+@using MonitoringDashboard.Services
 @layout DashboardLayout
 @inject IServiceScopeFactory ScopeFactory
+@inject IUserContextService UserContextService
 @rendermode InteractiveServer
 
 
 <div class="flex justify-between items-center mb-6">
     <h2 class="text-5xl">Scheduled Maintenance</h2>
-    <NavLink class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded" Href="/dashboard/maintenance/add">
-        Add Maintenance
-    </NavLink>
+    @if (_isAdmin || _isUser)
+    {
+        <NavLink class="button-primary" Href="/dashboard/maintenance/add">
+            Add Maintenance
+        </NavLink>
+    }
 </div>
 
 <div class="grid gap-4">

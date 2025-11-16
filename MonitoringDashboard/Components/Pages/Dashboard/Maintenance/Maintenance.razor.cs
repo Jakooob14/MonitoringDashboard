@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
+using MonitoringDashboard.Components.Shared.Enums;
 using MonitoringDashboard.Data;
 using MonitoringDashboard.Data.Models;
 
@@ -9,9 +10,16 @@ public partial class Maintenance
 {
     private List<Data.Models.Maintenance> _maintenances = new();
 
+    private bool _isAdmin;
+    private bool _isUser;
+    
+
     protected override async Task OnInitializedAsync()
     {
         await LoadMaintenances();
+
+        _isAdmin = await UserContextService.IsInRoleAsync(Role.Admin);
+        _isUser = await UserContextService.IsInRoleAsync(Role.User);
     }
 
     private async Task LoadMaintenances()

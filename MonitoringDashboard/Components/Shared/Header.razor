@@ -1,5 +1,6 @@
-﻿@using Microsoft.AspNetCore.Components.Authorization
-@inject AuthenticationStateProvider AuthStateProvider
+﻿@using MonitoringDashboard.Services
+@* @inject AuthenticationStateProvider AuthStateProvider *@
+@inject IUserContextService UserContextService
 
 <header class="container mx-auto mt-6">
     <nav class="flex justify-between items-center #bg-neutral-800 rounded #shadow-lg #border border-zinc-700">
@@ -24,12 +25,6 @@
     
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        if (user.Identity != null && user.Identity.IsAuthenticated)
-        {
-            _isLoggedIn = true;
-        }
+        _isLoggedIn = await UserContextService.IsLoggedInAsync();
     }
-
 }

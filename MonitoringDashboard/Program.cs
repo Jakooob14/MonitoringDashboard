@@ -76,8 +76,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddHostedService<MonitoringWorker>();
 builder.Services.AddHostedService<CleanupWorker>();
 
-// builder.Services.AddScoped<IAuthService, AuthService>();
-// builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IUserContextService, UserContextService>();
 
 builder.Services.AddControllers();
 

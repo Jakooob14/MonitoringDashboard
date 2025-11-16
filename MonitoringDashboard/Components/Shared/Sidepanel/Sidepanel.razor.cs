@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
-
-namespace MonitoringDashboard.Components.Shared.Sidepanel;
+﻿namespace MonitoringDashboard.Components.Shared.Sidepanel;
 
 public partial class Sidepanel
 {
@@ -28,17 +25,6 @@ public partial class Sidepanel
 
     protected override async Task OnInitializedAsync()
     {
-        using var scope = ScopeFactory.CreateScope();
-        using var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Data.Models.User>>();
-        
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user.Identity == null) return;
-
-        if (user.Identity.IsAuthenticated)
-        {
-            _currentUser = await userManager.GetUserAsync(user);
-        }
+        _currentUser = await UserContextService.GetCurrentUserAsync();
     }
 }
