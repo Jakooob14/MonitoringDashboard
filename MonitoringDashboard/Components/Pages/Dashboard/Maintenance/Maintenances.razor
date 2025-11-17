@@ -1,10 +1,12 @@
-﻿@page "/dashboard/maintenance"
+﻿@page "/dashboard/maintenances"
+@using MonitoringDashboard.Components.Shared.CascadingParameters
 @using MonitoringDashboard.Services
 @layout DashboardLayout
 @inject IServiceScopeFactory ScopeFactory
 @inject IUserContextService UserContextService
 @rendermode InteractiveServer
 
+<AppPageTitle Value="Maintenances"/>
 
 <div class="flex justify-between items-center mb-6">
     <h2 class="text-5xl">Scheduled Maintenance</h2>

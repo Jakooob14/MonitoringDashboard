@@ -1,0 +1,11 @@
+﻿@code {
+    [Parameter] public string? Value { get; set; }
+
+    [CascadingParameter(Name = "SetAppPageTitle")] 
+    public Action<string?>? SetAppPageTitle { get; set; }
+
+    protected override void OnInitialized()
+    {
+        SetAppPageTitle?.Invoke(Value);
+    }
+}

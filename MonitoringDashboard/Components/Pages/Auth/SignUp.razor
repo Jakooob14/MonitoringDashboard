@@ -1,12 +1,15 @@
 ﻿@page "/signup"
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Identity
+@using MonitoringDashboard.Components.Shared.CascadingParameters
 @using MonitoringDashboard.Data.Models
 @inject NavigationManager Nav
 @inject UserManager<User> UserManager
 @inject IUserStore<User> UserStore
 @inject AuthenticationStateProvider AuthStateProvider
 @rendermode InteractiveServer
+
+<AppPageTitle Value="Sign Up"/>
 
 <div class="w-96">
     <EditForm FormName="signupForm" Model="_formData" OnValidSubmit="HandleSignup" class="flex flex-col gap-4">

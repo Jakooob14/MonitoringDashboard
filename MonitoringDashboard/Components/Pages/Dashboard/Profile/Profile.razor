@@ -1,10 +1,13 @@
 ﻿@page "/dashboard/profile"
 @using Microsoft.AspNetCore.Components.Authorization
 @using MonitoringDashboard.Components.Shared
+@using MonitoringDashboard.Components.Shared.CascadingParameters
 @inject AuthenticationStateProvider AuthStateProvider
 @inject IServiceScopeFactory ScopeFactory
 @inject NavigationManager Nav
 @rendermode InteractiveServer
+
+<AppPageTitle Value="Profile"/>
 
 <h3>Profile</h3>
 

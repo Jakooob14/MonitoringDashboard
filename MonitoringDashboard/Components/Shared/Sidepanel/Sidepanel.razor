@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @using MonitoringDashboard.Components.Shared.ContextMenu
+@using MonitoringDashboard.Helpers
 @using MonitoringDashboard.Services
 @inject IUserContextService UserContextService
 @rendermode InteractiveServer
@@ -8,11 +9,11 @@
     <div class="flex flex-col justify-between h-full">
         <ul class="flex flex-col gap-y-4">
             <li>
-                <NavLink Href="/" class="text-2xl text-center">Monitoring Dashboard</NavLink>
+                <NavLink Href="/" class="text-2xl text-center">@AppConfig.AppName</NavLink>
                 <hr class="border border-zinc-700 mt-4"/>
             </li>
             <li><SidepanelButton Text="Services" IconPath="icons/service.svg" Href="/dashboard/services"/></li>
-            <li><SidepanelButton Text="Maintenance" IconPath="icons/wrench.svg" Href="/dashboard/maintenance"/></li>
+            <li><SidepanelButton Text="Maintenances" IconPath="icons/wrench.svg" Href="/dashboard/maintenances"/></li>
             <AuthorizeView Roles="Admin">
                 <li><SidepanelButton Text="Users" IconPath="icons/users.svg" Href="/dashboard/users"/></li>
             </AuthorizeView>

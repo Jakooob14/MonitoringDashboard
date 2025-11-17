@@ -1,7 +1,10 @@
 ﻿@page "/dashboard/users"
 @using MonitoringDashboard.Components.Shared
+@using MonitoringDashboard.Components.Shared.CascadingParameters
 @inject IServiceScopeFactory ScopeFactory
 @rendermode InteractiveServer
+
+<AppPageTitle Value="Users"/>
 
 <div class="flex justify-between items-center mb-6">
     <h2 class="text-5xl">Users</h2>

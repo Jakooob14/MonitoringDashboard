@@ -6,7 +6,7 @@ using MonitoringDashboard.Data.Models;
 
 namespace MonitoringDashboard.Components.Pages.Dashboard.Maintenance;
 
-public partial class Maintenance
+public partial class Maintenances
 {
     private List<Data.Models.Maintenance> _maintenances = new();
 

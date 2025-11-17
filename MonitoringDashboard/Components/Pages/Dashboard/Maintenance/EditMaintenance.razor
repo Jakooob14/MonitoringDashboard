@@ -1,11 +1,14 @@
-﻿@page "/dashboard/maintenance/edit/{Id:guid}"
+﻿@page "/dashboard/maintenances/edit/{Id:guid}"
 @using Microsoft.EntityFrameworkCore
+@using MonitoringDashboard.Components.Shared.CascadingParameters
 @using MonitoringDashboard.Components.Shared.Maintenance
 @inject IServiceScopeFactory ScopeFactory
 @inject NavigationManager Nav
 @layout DashboardLayout
 @rendermode InteractiveServer
 @attribute [Authorize(Roles = "Admin,User")]
+
+<AppPageTitle Value="Maintenance edit"/>
 
 <h2 class="text-2xl font-bold mb-4">Edit Maintenance</h2>
 

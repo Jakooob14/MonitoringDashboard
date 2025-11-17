@@ -1,15 +1,26 @@
-﻿@inherits LayoutComponentBase
+﻿@using MonitoringDashboard.Helpers
+@inherits LayoutComponentBase
 
-<div class="page">
-    <main>
-        <div class="content p-4">
-            @Body
-        </div>
-    </main>
-</div>
+@code {
+    private string? _appPageTitle;
+}
+
+<CascadingValue Name="SetAppPageTitle" Value="(Action<string?>)(title => _appPageTitle = title)">
+    <HeadContent>
+        <title>@(string.IsNullOrEmpty(_appPageTitle) ? AppConfig.AppName : $"{_appPageTitle} - {AppConfig.AppName}")</title>
+    </HeadContent>
+    <div class="page">
+        <main>
+            <div class="content p-4">
+                @Body
+            </div>
+        </main>
+    </div>
+</CascadingValue>
 
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+

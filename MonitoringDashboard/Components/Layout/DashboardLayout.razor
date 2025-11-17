@@ -1,12 +1,21 @@
-﻿@using Microsoft.AspNetCore.Components.Authorization
-@using MonitoringDashboard.Components.Shared.Sidepanel
+﻿@using MonitoringDashboard.Components.Shared.Sidepanel
+@using MonitoringDashboard.Helpers
 @inherits LayoutComponentBase
 
-<div class="page">
-    <Sidepanel/>
-    <main class="ms-[320px] p-8">
-        <div class="content max-w-[1400px] mx-auto">
-            @Body
-        </div>
-    </main>
-</div>
+@code {
+    private string? _appPageTitle;
+}
+
+<CascadingValue Name="SetAppPageTitle" Value="(Action<string?>)(title => _appPageTitle = title)">
+    <HeadContent>
+        <title>@(string.IsNullOrEmpty(_appPageTitle) ? AppConfig.AppName : $"{_appPageTitle} - {AppConfig.AppName}")</title>
+    </HeadContent>
+    <div class="page">
+        <Sidepanel/>
+        <main class="ms-[320px] p-8">
+            <div class="content max-w-[1400px] mx-auto">
+                @Body
+            </div>
+        </main>
+    </div>
+</CascadingValue>

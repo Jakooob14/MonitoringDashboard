@@ -1,11 +1,12 @@
-﻿@using MonitoringDashboard.Services
+﻿@using MonitoringDashboard.Helpers
+@using MonitoringDashboard.Services
 @* @inject AuthenticationStateProvider AuthStateProvider *@
 @inject IUserContextService UserContextService
 
 <header class="container mx-auto mt-6">
     <nav class="flex justify-between items-center #bg-neutral-800 rounded #shadow-lg #border border-zinc-700">
         <div>
-            <NavLink Href="/" class="text-4xl">Monitoring Dashboard</NavLink>
+            <NavLink Href="/" class="text-4xl">@AppConfig.AppName</NavLink>
         </div>
         <div>
             @if (_isLoggedIn)

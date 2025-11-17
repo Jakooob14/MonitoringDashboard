@@ -1,13 +1,13 @@
 ﻿@page "/"
 @using MonitoringDashboard.Components.Shared
+@using MonitoringDashboard.Components.Shared.CascadingParameters
 @using MonitoringDashboard.Components.Shared.Maintenance
 @using MonitoringDashboard.Components.Shared.MonitoredService
 @using MonitoringDashboard.Services
-@inject ServiceChecker ServiceChecker
 @inject IServiceScopeFactory ScopeFactory
 @rendermode InteractiveServer
 
-<PageTitle>Home</PageTitle>
+<AppPageTitle Value="Home"/>
 
 <Header></Header>
 

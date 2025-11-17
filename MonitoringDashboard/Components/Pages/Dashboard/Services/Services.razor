@@ -1,11 +1,14 @@
 ﻿@page "/dashboard/services"
 @using MonitoringDashboard.Components.Shared
+@using MonitoringDashboard.Components.Shared.CascadingParameters
 @using MonitoringDashboard.Components.Shared.MonitoredService
 @using MonitoringDashboard.Services
 @layout DashboardLayout
 @inject IServiceScopeFactory ScopeFactory
 @inject IUserContextService UserContextService
 @rendermode InteractiveServer
+
+<AppPageTitle Value="Services"/>
 
 <section>
     <div class="mb-6">

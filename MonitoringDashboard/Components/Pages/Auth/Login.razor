@@ -1,11 +1,14 @@
 ﻿@page "/login"
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Identity
+@using MonitoringDashboard.Components.Shared.CascadingParameters
 @using MonitoringDashboard.Data.Models
 @inject NavigationManager Nav
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 @inject AuthenticationStateProvider AuthStateProvider
+
+<AppPageTitle Value="Log In"/>
 
 <h3>Login</h3>
 
