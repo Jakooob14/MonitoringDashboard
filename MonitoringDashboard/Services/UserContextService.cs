@@ -7,32 +7,36 @@ namespace MonitoringDashboard.Services;
 
 public class UserContextService(
     AuthenticationStateProvider auth,
-    UserManager<User> userManager) : IUserContextService
+    IServiceScopeFactory scopeFactory) : IUserContextService
 {
     public async Task<bool> IsLoggedInAsync()
     {
         var authState = await auth.GetAuthenticationStateAsync();
         return authState.User.Identity?.IsAuthenticated ?? false;
     }
-    
+
     public async Task<User?> GetCurrentUserAsync()
     {
         var authState = await auth.GetAuthenticationStateAsync();
-        var user = authState.User;
+        var principal = authState.User;
 
-        if (user.Identity == null) return null;
+        if (!principal.Identity?.IsAuthenticated ?? true)
+            return null;
 
-        if (user.Identity.IsAuthenticated)
-            return await userManager.GetUserAsync(user);
+        using var scope = scopeFactory.CreateScope();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 
-        return null;
+        return await userManager.GetUserAsync(principal);
     }
-    
+
     public async Task<bool> IsInRoleAsync(Role role)
     {
         var user = await GetCurrentUserAsync();
         if (user == null) return false;
 
+        using var scope = scopeFactory.CreateScope();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        
         return await userManager.IsInRoleAsync(user, role.ToString());
     }
 }
