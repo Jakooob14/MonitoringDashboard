@@ -25,7 +25,7 @@
     {
         @foreach (var maintenance in _maintenances)
         {
-            <MaintenanceDashboardCard Maintenance="maintenance" />
+            <MaintenanceDashboardCard Maintenance="maintenance" @key="maintenance.Id" />
         }
     }
 </div>

@@ -6,8 +6,8 @@
     <div class="flex justify-between items-center">
         <div>
             <h2 class="text-2xl font-bold">@MonitoredService.Name</h2>
-            @* <span class="text-zinc-400 bg-[hsl(240,4%,20%)] border-[1px] border-zinc-600 px-2 rounded-sm">HTTP</span> *@
-            <span class="text-zinc-400">@GetFormattedUptime()</span>
+            @* <span class="text-zinc-400 bg-[hsl(240,4%,20%)] border border-zinc-600 px-2 rounded-sm">HTTP</span> *@
+            <span class="text-zinc-400">@FormattedUptime</span>
         </div>
         <ServiceStatusBar Statuses="Statuses" FixedBarWidth="5"/>
     </div>
@@ -26,14 +26,6 @@
             Delete
         </button>
     </div>
-    
-    @* <div class="flex items-center gap-4"> *@
-    @*     <ServiceStatusBar Statuses="Statuses" FixedBarWidth="5"/> *@
-    @*     <div class="relative"> *@
-    @*         <div @onclick="ToggleContextMenu" class="button-primary !p-1"><Icon Path="icons/ellipsis.svg"/></div> *@
-    @*         <ContextMenu style=@($"display: {(_contextMenuOpen ? "block" : "none")}") Items="_contextMenuItems" OnClose="() => _contextMenuOpen = false" /> *@
-    @*     </div> *@
-    @* </div> *@
 </NavLink>
 
 <Modal @bind-IsOpen="_deleteModalOpen" 

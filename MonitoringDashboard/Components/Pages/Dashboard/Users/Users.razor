@@ -23,7 +23,7 @@
         <tbody>
         @foreach (var user in _users)
         {
-            <tr class="border-t border-neutral-700">
+            <tr class="border-t border-neutral-700" @key="user.Id">
                 <td class="p-4">@user.UserName</td>
                 <td class="p-4">@user.Email</td>
                 <td class="p-4">@_roles[user.Id]</td>

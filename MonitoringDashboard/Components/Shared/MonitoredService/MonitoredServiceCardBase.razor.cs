@@ -19,6 +19,7 @@ public partial class MonitoredServiceCardBase : ComponentBase
     protected bool ServiceUp;
     protected string LastIncidentString = string.Empty;
     protected float UptimePercentage;
+    protected string FormattedUptime = string.Empty;
 
     private List<ServiceCheck> _recentChecks = new();
     private List<DailyServiceStats> _recentStats = new();
@@ -87,6 +88,7 @@ public partial class MonitoredServiceCardBase : ComponentBase
         ServiceUp = await IsServiceUp(db);
         LastIncidentString = await GetLastIncidentString(db);
         UptimePercentage = GetUptimePercentage();
+        FormattedUptime = GetFormattedUptime();
 
         StateHasChanged();
     }
@@ -282,7 +284,7 @@ public partial class MonitoredServiceCardBase : ComponentBase
         Statuses.Add(status);
     }
 
-    protected string GetFormattedUptime()
+    private string GetFormattedUptime()
     {
         var span = DateTime.UtcNow - MonitoredService.LastDowntimeAt;
         List<string> parts = new();
