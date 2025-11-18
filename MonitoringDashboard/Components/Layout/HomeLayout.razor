@@ -1,5 +1,5 @@
-﻿@using MonitoringDashboard.Components.Shared.Sidepanel
-@using MonitoringDashboard.Helpers
+﻿@using MonitoringDashboard.Helpers
+@using MonitoringDashboard.Components.Shared
 @inherits LayoutComponentBase
 
 @code {
@@ -11,9 +11,9 @@
         <title>@(string.IsNullOrEmpty(_appPageTitle) ? AppConfig.AppName : $"{_appPageTitle} - {AppConfig.AppName}")</title>
     </HeadContent>
     <div class="page">
-        <Sidepanel/>
-        <main class="xl:ms-80 p-8 mb-16 xl:mb-0">
-            <div class="content max-w-[1400px] mx-auto">
+        <main>
+            <div class="content p-4">
+                <Header></Header>
                 @Body
             </div>
         </main>

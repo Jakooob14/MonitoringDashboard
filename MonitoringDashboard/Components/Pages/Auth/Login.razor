@@ -7,26 +7,29 @@
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 @inject AuthenticationStateProvider AuthStateProvider
+@layout HomeLayout
 
 <AppPageTitle Value="Log In"/>
 
-<h3>Login</h3>
+<div class="min-w-full min-h-screen flex flex-col justify-center items-center gap-8 -mt-8">
+    <h2 class="text-5xl">Log In</h2>
 
-<div class="w-96">
-    <EditForm FormName="loginForm" method="post" Model="Input" OnValidSubmit="HandleLogin" class="flex flex-col gap-4">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
+    <div class="w-96">
+        <EditForm FormName="loginForm" method="post" Model="Input" OnValidSubmit="HandleLogin" class="flex flex-col gap-4">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
     
-        <div>
-            <label for="email">E-Mail</label>
-            <InputText id="email" class="input w-full" @bind-Value="Input.Email" />
-        </div>
+            <div>
+                <label for="email">E-Mail</label>
+                <InputText id="email" class="input w-full" @bind-Value="Input.Email" />
+            </div>
     
-        <div>
-            <label for="password">Password</label>
-            <InputText id="password" type="password" class="input w-full" @bind-Value="Input.Password" />
-        </div>
+            <div>
+                <label for="password">Password</label>
+                <InputText id="password" type="password" class="input w-full" @bind-Value="Input.Password" />
+            </div>
     
-        <button type="submit" class="button-primary">Login</button>
-    </EditForm>
+            <button type="submit" class="button-primary">Login</button>
+        </EditForm>
+    </div>
 </div>

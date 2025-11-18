@@ -8,6 +8,7 @@ public partial class SidepanelButton : ComponentBase, IDisposable
     [Parameter] public required string Text { get; set; } = string.Empty;
     [Parameter] public string IconPath { get; set; } = string.Empty;
     [Parameter] public string Href { get; set; } = "#";
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; } = new();
         
     private EventHandler<LocationChangedEventArgs>? _locationChangedHandler;
 

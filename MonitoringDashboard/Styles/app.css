@@ -50,6 +50,22 @@ h1:focus {
     text-align: start;
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-none;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-zinc-800 rounded border border-zinc-700;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-700;
+}
+
 @layer base {
     html, body {
         font-family: 'Poppins', Helvetica, Arial, sans-serif;

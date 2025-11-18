@@ -29,5 +29,8 @@
         <InputCheckbox id="isActive" class="input" @bind-Value="NewMonitoredService.IsActive" />
         <ValidationMessage For="@(() => NewMonitoredService.IsActive)" />
     </div>
-    <button type="submit" class="input">Submit</button>
+
+    <button type="submit" class="input">
+        @(EditMode ? "Save Changes" : "Add Service")
+    </button>
 </EditForm>

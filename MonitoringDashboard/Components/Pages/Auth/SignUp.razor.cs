@@ -30,7 +30,6 @@ public partial class SignUp
         IUserEmailStore<User> emailStore = (IUserEmailStore<User>)UserStore;
         await emailStore.SetEmailAsync(user, _formData.Email, CancellationToken.None);
         var res = await UserManager.CreateAsync(user, _formData.Password);
-        Console.WriteLine(res);
 
         if (!res.Succeeded)
         {
