@@ -3,6 +3,7 @@
 public partial class Sidepanel
 {
     private Data.Models.User? _currentUser;
+    private bool _sidebarOpen;
 
     private List<ContextMenu.ContextMenu.ContextMenuItem> _contextMenuItems = new()
     {

@@ -6,6 +6,11 @@
 @rendermode InteractiveServer
 
 <aside class="fixed w-[320px] h-screen bg-neutral-800 p-8">
+    <div class="absolute top-0 left-0 m-4 w-8 h-8 rounded-full bg-neutral-900 border border-zinc-700 flex justify-center items-center" @onclick="() => { _sidebarOpen = !_sidebarOpen; StateHasChanged(); }">-</div>
+    @if (_sidebarOpen)
+    {
+        <div>test</div>
+    }
     <div class="flex flex-col justify-between h-full">
         <ul class="flex flex-col gap-y-4">
             <li>
@@ -21,7 +26,7 @@
         @if (_currentUser != null)
         {
             <div class="relative">
-                <hr class="border-zinc-700 my-4" />
+                <hr class="border-zinc-700 my-4"/>
                 <div class="flex flex-col gap-y-1 hover:bg-zinc-900 transition-colors w-full p-3 rounded cursor-pointer text-zinc-100" @onclick="() => _isContextMenuOpen = true">
                     <span class="font-medium text-xl text-ellipsis whitespace-nowrap overflow-hidden">@_currentUser.UserName</span>
                     <span class="text-ellipsis whitespace-nowrap overflow-hidden">@_currentUser.Email</span>
