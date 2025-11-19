@@ -33,19 +33,6 @@ services:
       - monitoring-dashboard
     restart: unless-stopped
 
-  nginx:
-    image: nginx:stable-alpine
-    container_name: monitoring-dashboard-proxy
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - dashboard
-    networks:
-      - monitoring-dashboard
-    restart: unless-stopped
-
 volumes:
   pgdata:
   data-protection:
