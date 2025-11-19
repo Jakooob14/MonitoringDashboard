@@ -22,7 +22,10 @@ builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogL
 builder.Logging.AddFilter("System.Net.Http.HttpClient.ServiceChecker.LogicalHandler", LogLevel.Warning);
 builder.Logging.AddFilter("System.Net.Http.HttpClient.ServiceChecker.ClientHandler", LogLevel.Warning);
 
-Env.Load(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.FullName, ".env"));
+if (builder.Environment.IsDevelopment())
+{
+    Env.Load(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.FullName, ".env"));
+}
 
 var connectionString = $"Host={Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? "postgres"};" +
                        $"Database={Environment.GetEnvironmentVariable("POSTGRES_DB") ?? "monitoring_dashboard"};" +
