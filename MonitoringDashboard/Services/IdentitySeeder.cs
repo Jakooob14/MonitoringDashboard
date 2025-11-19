@@ -23,7 +23,7 @@ public static class IdentitySeeder
     public static async Task SeedAdminUserAsync(IHost app)
     {
         string adminUsername = Environment.GetEnvironmentVariable("ADMIN_USERNAME") ?? "admin";
-        string adminEmail = Environment.GetEnvironmentVariable("ADMIN_EMAIL") ?? "admin@admin.admin";
+        string adminEmail = Environment.GetEnvironmentVariable("ADMIN_EMAIL") ?? "admin@example.com";
         string? adminPassword = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
 
         if (adminPassword == null)

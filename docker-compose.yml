@@ -1,15 +1,18 @@
 services:
   dashboard:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: jakooob/monitoring-dashboard:latest
     container_name: monitoring-dashboard
     env_file:
       - .env
     environment:
-      App__BaseUrl: ${APP_BASE_URL}
-      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
-      ConnectionStrings__Default: Host=${POSTGRES_HOST};Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      App__BaseUrl: ${APP_BASE_URL:-http://localhost:8080}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
+      ConnectionStrings__Default: >
+        Host=${POSTGRES_HOST:-postgres};
+        Port=5432;
+        Database=${POSTGRES_DB:-monitoring_dashboard};
+        Username=${POSTGRES_USER:-monitoring_dashboard};
+        Password=${POSTGRES_PASSWORD}
     depends_on:
       - postgres
     volumes:
@@ -17,6 +20,8 @@ services:
     networks:
       - monitoring-dashboard
     restart: unless-stopped
+    ports:
+      - 8080:8080
 
   postgres:
     image: postgres:17
@@ -24,9 +29,9 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_USER: ${POSTGRES_USER:-monitoring_dashboard}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_DB: ${POSTGRES_DB:-monitoring_dashboard}
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
