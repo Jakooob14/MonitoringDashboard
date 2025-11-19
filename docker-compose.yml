@@ -7,6 +7,10 @@ services:
     environment:
       App__BaseUrl: ${APP_BASE_URL:-http://localhost:8080}
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
+      POSTGRES_HOST: ${POSTGRES_HOST:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-monitoring_dashboard}
+      POSTGRES_USER: ${POSTGRES_USER:-monitoring_dashboard}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
       - postgres
     volumes:
