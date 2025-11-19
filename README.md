@@ -38,7 +38,7 @@ The recommended way to run Monitoring Dashboard is via **Docker Compose**.
 
 Required fields:
  - `POSTGRES_PASSWORD` - Password for the database user
- - `ADMIN_PASSWORD` - Default admin password for the dashboard
+ - `ADMIN_PASSWORD` - Default admin password for the dashboard (Must contain atleast one alphanumeric and one uppercase letter)
 
 Optional fields:
  - `POSTGRES_DB` - The name of the database (Default: monitoring_dashboard)
