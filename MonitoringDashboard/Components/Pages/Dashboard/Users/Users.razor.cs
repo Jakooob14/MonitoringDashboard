@@ -10,9 +10,11 @@ public partial class Users
     private bool _deleteModalOpen;
     private User? _userToDelete;
     private Dictionary<string, string> _roles = new();
+    private string test = "nic";
 
     protected override async Task OnInitializedAsync()
     {
+        test = Environment.GetEnvironmentVariable("POSTGRES_DB") ?? "not set";
         using var scope = ScopeFactory.CreateScope();
         using var userStore = scope.ServiceProvider.GetRequiredService<IUserStore<User>>();
 

@@ -24,9 +24,9 @@ builder.Logging.AddFilter("System.Net.Http.HttpClient.ServiceChecker.ClientHandl
 
 Env.Load(Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())!.FullName, ".env"));
 
-var connectionString = $"Host={Environment.GetEnvironmentVariable("POSTGRES_HOST")};" +
-                       $"Database={Environment.GetEnvironmentVariable("POSTGRES_DB")};" +
-                       $"Username={Environment.GetEnvironmentVariable("POSTGRES_USER")};" +
+var connectionString = $"Host={Environment.GetEnvironmentVariable("POSTGRES_HOST") ?? "postgres"};" +
+                       $"Database={Environment.GetEnvironmentVariable("POSTGRES_DB") ?? "monitoring_dashboard"};" +
+                       $"Username={Environment.GetEnvironmentVariable("POSTGRES_USER") ?? "monitoring_dashboard"};" +
                        $"Password={Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")};";
 
 
