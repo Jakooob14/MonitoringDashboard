@@ -1,0 +1,44 @@
+services:
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: monitoring-dashboard
+    env_file:
+      - .env
+    environment:
+      # override .env keys specifically for ASP.NET Core structure
+      App__BaseUrl: ${APP_BASE_URL}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      ConnectionStrings__Default: Host=${POSTGRES_HOST};Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    volumes:
+      - data-protection:/root/.aspnet/DataProtection-Keys
+    networks:
+      - main
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:17
+    container_name: monitoring-dashboard-db
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - main
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  data-protection:
+
+networks:
+  main:

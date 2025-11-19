@@ -1,12 +1,12 @@
 ﻿@page "/dashboard"
 @inject NavigationManager Nav
 
-<h3>Dashboard</h3>
-
 @code {
-    protected override void OnInitialized()
+    protected override void OnAfterRender(bool firstRender)
     {
-        Nav.NavigateTo("/dashboard/services");
+        if (firstRender)
+        {
+            Nav.NavigateTo("/dashboard/services", true);
+        }
     }
-
 }
