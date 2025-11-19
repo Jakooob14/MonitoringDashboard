@@ -53,7 +53,7 @@ public partial class MaintenanceForm : ComponentBase
 
         db.Maintenances.Add(NewMaintenance);
         await db.SaveChangesAsync();
-        Nav.NavigateTo("/dashboard/maintenance");
+        Nav.NavigateTo("/dashboard/maintenances");
     }
 
     private async Task UpdateMaintenance()
@@ -82,7 +82,7 @@ public partial class MaintenanceForm : ComponentBase
         existing.MonitoredServices = selectedServices;
 
         await db.SaveChangesAsync();
-        Nav.NavigateTo("/dashboard/maintenance");
+        Nav.NavigateTo("/dashboard/maintenances");
     }
     
     private static DateTime ToUtc(DateTime dt) => dt.Kind switch

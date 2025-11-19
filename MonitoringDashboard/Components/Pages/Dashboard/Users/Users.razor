@@ -13,50 +13,57 @@
     </NavLink>
 </div>
 
-<div class="bg-neutral-800 rounded shadow-lg border border-zinc-700 overflow-x-scroll">
-    <table class="table-auto w-full">
-        <thead>
-        <tr class="bg-neutral-900">
-            <th class="py-4 ps-4 text-start">Username</th>
-            <th class="py-4 ps-4 text-start">Email</th>
-            <th class="py-4 ps-4 text-start">Role</th>
-            <th class="py-4 pe-4 text-end">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var user in _users)
-        {
-            <tr class="border-t border-neutral-700" @key="user.Id">
-                <td class="p-4">@user.UserName</td>
-                <td class="p-4">@user.Email</td>
-                <td class="p-4">@_roles[user.Id]</td>
-                <td class="p-4 flex justify-end gap-2">
-                    @if (!_roles[user.Id].Contains("Admin"))
-                    {
-                        <NavLink class="button-primary flex items-center gap-2 text-sm font-medium" 
-                                 Href=@($"/dashboard/users/edit/{user.Id}")>
-                            <Icon Path="icons/pen.svg" />
-                            Edit
-                        </NavLink>
-                    }
-                    else
-                    {
-                        <span class="button-primary flex items-center gap-2 text-sm font-medium opacity-50 cursor-not-allowed">
-                            <Icon Path="icons/pen.svg" />
-                            Edit
-                        </span>
-                    }
-                    <button class="button-primary flex items-center gap-2 text-sm font-medium text-red-400 transition-colors @(_roles[user.Id].Contains("Admin") ? "opacity-50 cursor-not-allowed" : "")"
-                            @onclick='() => { if (!_roles[user.Id].Contains("Admin")) OpenDeleteModal(user); }'>
-                        <Icon Path="icons/trash-can.svg"/>
-                        Delete
-                    </button>
-                </td>
+@if (_users.Count == 0)
+{
+    <span class="text-zinc-400">No users found.</span>
+}
+else
+{
+    <div class="bg-neutral-800 rounded shadow-lg border border-zinc-700 overflow-x-scroll">
+        <table class="table-auto w-full">
+            <thead>
+            <tr class="bg-neutral-900">
+                <th class="py-4 ps-4 text-start">Username</th>
+                <th class="py-4 ps-4 text-start">Email</th>
+                <th class="py-4 ps-4 text-start">Role</th>
+                <th class="py-4 pe-4 text-end">Actions</th>
             </tr>
-        }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+            @foreach (var user in _users)
+            {
+                <tr class="border-t border-neutral-700" @key="user.Id">
+                    <td class="p-4">@user.UserName</td>
+                    <td class="p-4">@user.Email</td>
+                    <td class="p-4">@_roles[user.Id]</td>
+                    <td class="p-4 flex justify-end gap-2">
+                        @if (!_roles[user.Id].Contains("Admin"))
+                        {
+                            <NavLink class="button-primary flex items-center gap-2 text-sm font-medium"
+                                     Href=@($"/dashboard/users/edit/{user.Id}")>
+                                <Icon Path="icons/pen.svg"/>
+                                Edit
+                            </NavLink>
+                        }
+                        else
+                        {
+                            <span class="button-primary flex items-center gap-2 text-sm font-medium opacity-50 cursor-not-allowed">
+                                <Icon Path="icons/pen.svg"/>
+                                Edit
+                            </span>
+                        }
+                        <button class="button-primary flex items-center gap-2 text-sm font-medium text-red-400 transition-colors @(_roles[user.Id].Contains("Admin") ? "opacity-50 cursor-not-allowed" : "")"
+                                @onclick='() => { if (!_roles[user.Id].Contains("Admin")) OpenDeleteModal(user); }'>
+                            <Icon Path="icons/trash-can.svg"/>
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
 
 <Modal @bind-IsOpen="_deleteModalOpen" 
        Title="Delete Service" 

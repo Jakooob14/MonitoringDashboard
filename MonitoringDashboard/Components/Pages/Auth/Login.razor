@@ -31,5 +31,11 @@
     
             <button type="submit" class="button-primary">Login</button>
         </EditForm>
+        <ul class="mt-2">
+            @foreach(var error in _errors)
+            {
+                <li class="text-red-500">@error</li>
+            }
+        </ul>
     </div>
 </div>

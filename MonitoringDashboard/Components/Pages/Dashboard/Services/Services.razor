@@ -24,14 +24,22 @@
         <RefreshTimer OnRefresh="UpdateMonitoredServices"/>
     </div>
     <ul>
-        @foreach(var monitoredService in _monitoredServices)
+        @if (_monitoredServices.Count == 0)
         {
-            <li class="my-4"><MonitoredServiceDashboardCard 
-                                 @key="monitoredService.Id"
-                                 MonitoredService="monitoredService"
-                                 DisplayUnit="TimeUnit.Hours"
-                                 RecentUnitsToShow="24"
-                                 OnDeleted="UpdateMonitoredServices"/></li>
+            <span class="text-zinc-400">No services found.</span>
+        }
+        else
+        {
+            @foreach (var monitoredService in _monitoredServices)
+            {
+                <li class="my-4">
+                    <MonitoredServiceDashboardCard
+                        @key="monitoredService.Id"
+                        MonitoredService="monitoredService"
+                        DisplayUnit="TimeUnit.Hours"
+                        RecentUnitsToShow="24"
+                        OnDeleted="UpdateMonitoredServices"/></li>
+            }
         }
     </ul>
 </section>

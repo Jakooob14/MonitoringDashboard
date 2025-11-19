@@ -50,7 +50,26 @@ public class MonitoringWorker(
                 // === Maintenance status updates ===
                 var now = DateTime.UtcNow;
                 var maintenances = await db.Maintenances.ToListAsync(stoppingToken);
-
+                
+                foreach (var maintenance in maintenances)
+                {
+                    if (maintenance.Status == MaintenanceStatus.Scheduled &&
+                        maintenance.StartTime <= now)
+                    {
+                        maintenance.Status = MaintenanceStatus.InProgress;
+                        db.Maintenances.Update(maintenance);
+                        logger.LogInformation("Maintenance {MaintenanceId} started.", maintenance.Id);
+                    }
+                    else if (maintenance.Status == MaintenanceStatus.InProgress &&
+                             maintenance.EndTime <= now)
+                    {
+                        maintenance.Status = MaintenanceStatus.Completed;
+                        db.Maintenances.Update(maintenance);
+                        logger.LogInformation("Maintenance {MaintenanceId} completed.", maintenance.Id);
+                    }
+                }
+                
+                // === Incident management ===
                 foreach (var service in services)
                 {
                     var lastCheck = await db.ServiceChecks

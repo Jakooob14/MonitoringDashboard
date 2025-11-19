@@ -8,6 +8,8 @@ public partial class Login
     [SupplyParameterFromForm] private LoginModel Input { get; set; } = new();
     [SupplyParameterFromQuery] public string? ReturnUrl { get; set; }
     
+    private List<string> _errors = new();
+    
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
@@ -20,10 +22,12 @@ public partial class Login
 
     private async Task HandleLogin()
     {
+        _errors.Clear();
+        
         var user = await UserManager.FindByEmailAsync(Input.Email);
         if (user == null)
         {
-            // TODO: Show error message
+            _errors.Add("Invalid login attempt.");
             return;
         }
         
@@ -31,7 +35,7 @@ public partial class Login
 
         if (!res.Succeeded)
         {
-            // TODO: Show error message
+            _errors.Add("Invalid login attempt.");
             return;
         }
         
