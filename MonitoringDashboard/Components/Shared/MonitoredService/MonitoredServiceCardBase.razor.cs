@@ -294,12 +294,14 @@ public partial class MonitoredServiceCardBase : ComponentBase
         int days = span.Days % 365 % 30;
         int hours = span.Hours;
         int minutes = span.Minutes;
+        int seconds = span.Seconds;
 
         if (years > 0) parts.Add($"{years} year{(years >= 2 ? "s" : "")}");
         if (months > 0) parts.Add($"{months} month{(months >= 2 ? "s" : "")}");
         if (days > 0) parts.Add($"{days} day{(days >= 2 ? "s" : "")}");
         if (hours > 0) parts.Add($"{hours} hour{(hours >= 2 ? "s" : "")}");
         if (minutes > 0) parts.Add($"{minutes} minute{(minutes >= 2 ? "s" : "")}");
+        if (seconds > 0) parts.Add($"{seconds} minute{(seconds >= 2 ? "s" : "")}");
 
         return parts.Count > 0
             ? "Up " + string.Join(", ", parts.Take(2))
