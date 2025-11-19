@@ -24,7 +24,7 @@
         <InputNumber id="checkIntervalSeconds" class="input" @bind-Value="NewMonitoredService.CheckIntervalSeconds" />
         <ValidationMessage For="@(() => NewMonitoredService.CheckIntervalSeconds)" />
     </div>
-    <div>
+    <div class="hidden">
         <label for="isActive">Is Active</label>
         <InputCheckbox id="isActive" class="input" @bind-Value="NewMonitoredService.IsActive" />
         <ValidationMessage For="@(() => NewMonitoredService.IsActive)" />

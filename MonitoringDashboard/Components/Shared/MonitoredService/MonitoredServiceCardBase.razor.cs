@@ -301,7 +301,7 @@ public partial class MonitoredServiceCardBase : ComponentBase
         if (days > 0) parts.Add($"{days} day{(days >= 2 ? "s" : "")}");
         if (hours > 0) parts.Add($"{hours} hour{(hours >= 2 ? "s" : "")}");
         if (minutes > 0) parts.Add($"{minutes} minute{(minutes >= 2 ? "s" : "")}");
-        if (seconds > 0) parts.Add($"{seconds} minute{(seconds >= 2 ? "s" : "")}");
+        if (seconds > 0) parts.Add($"{seconds} second{(seconds >= 2 ? "s" : "")}");
 
         return parts.Count > 0
             ? "Up " + string.Join(", ", parts.Take(2))

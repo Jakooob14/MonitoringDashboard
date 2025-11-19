@@ -15,6 +15,7 @@ public partial class EditMaintenance
         await using var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
         var maintenance = await db.Maintenances
+            .Include(m => m.MonitoredServices)
             .FirstOrDefaultAsync(m => m.Id == Id);
 
         if (maintenance == null)

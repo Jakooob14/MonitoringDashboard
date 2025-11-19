@@ -18,7 +18,7 @@ public partial class MaintenanceForm : ComponentBase
     protected List<Data.Models.MonitoredService> AllMonitoredServices { get; set; } = new();
     protected List<Guid> SelectedServiceIds { get; set; } = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         using var scope = ScopeFactory.CreateScope();
         await using var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -36,6 +36,14 @@ public partial class MaintenanceForm : ComponentBase
             NewMaintenance.EndTime = DateTime.UtcNow.AddHours(1);
             SetNameAsRandomPhrase();
         }
+    }
+    
+    private void ToggleService(Guid serviceId, bool isChecked)
+    {
+        if (isChecked)
+            SelectedServiceIds.Add(serviceId);
+        else
+            SelectedServiceIds.Remove(serviceId);
     }
 
     private async Task AddMaintenance()
