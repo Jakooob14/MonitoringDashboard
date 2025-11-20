@@ -3,7 +3,7 @@
 @inject NavigationManager Nav
 
 <div class="@($"bg-neutral-800 hover:bg-neutral-800/70 text-zinc-100 rounded-sm flex flex-col gap-4 shadow-lg border-s-4 border border-zinc-700 relative {(ServiceUp ? "border-s-green-500" : "border-s-red-500")}")">
-    <NavLink Href="@($"/dashboard/services/{MonitoredService.Id}")" class="absolute top-0 left-0 w-full h-full"></NavLink>
+    <NavLink Href="@($"/dashboard/services/{MonitoredService.Id}")" class="absolute top-0 left-0 w-full h-full z-10"></NavLink>
     <div class="p-6 flex flex-col gap-4 shadow-lg relative">
         <div class="flex justify-between items-center flex-wrap">
             <div>
@@ -17,12 +17,12 @@
         <hr class="border-zinc-700 my-2"/>
 
         <div class="flex gap-2 flex-wrap">
-            <NavLink class="button-primary flex items-center gap-2 text-sm font-medium" Href=@($"/dashboard/services/edit/{MonitoredService.Id}")>
+            <NavLink class="button-primary flex items-center gap-2 text-sm font-medium z-20" Href=@($"/dashboard/services/edit/{MonitoredService.Id}")>
                 <Icon Path="icons/pen.svg"/>
                 Edit
             </NavLink>
 
-            <button class="button-primary flex items-center gap-2 text-sm font-medium text-red-400 transition-colors"
+            <button class="button-primary flex items-center gap-2 text-sm font-medium text-red-400 transition-colors z-20"
                     @onclick="() => _deleteModalOpen = true">
                 <Icon Path="icons/trash-can.svg"/>
                 Delete
